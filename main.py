@@ -12,6 +12,7 @@ def change_image(change_type, image, data):
                     green = pixel[1]
                     blue = pixel[2]
                     data[x, y] = (red, green, blue)
+            image.save("image_out.png")
         case '1':
             for y in range(image.height):
                 for x in range(image.width):
@@ -21,6 +22,7 @@ def change_image(change_type, image, data):
                     blue = pixel[2]
                     greyscalec_value = int((red*.21)+(green*.71)+(blue*.08)) // 3
                     data[x, y] = (greyscalec_value, greyscalec_value, greyscalec_value)
+            image.save("image_out.png")
         case '2':
             for y in range(image.height):
                 for x in range(image.width):
@@ -30,6 +32,7 @@ def change_image(change_type, image, data):
                     blue = pixel[2]
                     greyscale_value = (red+green+blue) // 3
                     data[x, y] = (greyscale_value, greyscale_value, greyscale_value)
+            image.save("image_out.png")
         case '3':
             for y in range(image.height):
                 for x in range(image.width):
@@ -42,6 +45,7 @@ def change_image(change_type, image, data):
                         data[x, y] = (red, green, blue)
                     else:
                         data[x, y] = (greyscale_value, greyscale_value, greyscale_value)
+            image.save("image_out.png")
         case '4':
             for y in range(image.height):
                 for x in range(image.width):
@@ -54,6 +58,7 @@ def change_image(change_type, image, data):
                         data[x, y] = (red, green, blue)
                     else:
                         data[x, y] = (greyscale_value, greyscale_value, greyscale_value)
+            image.save("image_out.png")
         case '5':
             for y in range(image.height):
                 for x in range(image.width):
@@ -66,6 +71,7 @@ def change_image(change_type, image, data):
                         data[x, y] = (red, green, blue)
                     else:
                         data[x, y] = (greyscale_value, greyscale_value, greyscale_value)
+            image.save("image_out.png")
         case '6':
             for y in range(image.height):
                 for x in range(image.width):
@@ -74,10 +80,12 @@ def change_image(change_type, image, data):
                     green = pixel[1]
                     blue = pixel[2]
                     data[x, y] = (255-red, 255-green, 255-blue)
+            image.save("image_out.png")
         case '7':
             for y in range(image.height):
                 for x in range(image.width):
                     data[x, y] = (5,6,7)
+            image.save("image_out.png")
         case '8':
             for y in range(image.height):
                 for x in range(image.width):
@@ -86,6 +94,7 @@ def change_image(change_type, image, data):
                     green = pixel[1]
                     blue = pixel[2]
                     data[image.width-x-1,y] = (red, green, blue)
+            image.save("image_out.png")
         case '9':
             for y in range(image.height):
                 for x in range(image.width):
@@ -95,6 +104,7 @@ def change_image(change_type, image, data):
                     blue = pixel[2]
                     if x >= (image.width//2):
                         data[image.width -1-x, y] = (red, green, blue)
+            image.save("image_out.png")
         case '10':
             for y in range(image.height):
                 for x in range(image.width):
@@ -103,6 +113,7 @@ def change_image(change_type, image, data):
                     green = pixel[1]
                     blue = pixel[2]
                     data[x,image.height-1- y] = (red, green, blue)
+            image.save("image_out.png")
         case '11':
             for y in range(image.height):
                 for x in range(image.width):
@@ -112,6 +123,7 @@ def change_image(change_type, image, data):
                     blue = pixel[2]
                     if y >= (image.height // 2):
                         data[x,image.height-1-y] = (red, green, blue)
+            image.save("image_out.png")
         case '12':
             for y in range(image.height):
                 x_pixels = []
@@ -120,6 +132,7 @@ def change_image(change_type, image, data):
                     x_pixels.append(pixel)
                 for x in range(image.width):
                     data[x, y] = x_pixels[image.width-x-1]
+            image.save("image_out.png")
         case '13':
             for x in range(image.width):
                 y_pixels = []
@@ -128,6 +141,7 @@ def change_image(change_type, image, data):
                     y_pixels.append(pixel)
                 for y in range(image.height):
                     data[x, y] = y_pixels[image.height-y-1]
+            image.save("image_out.png")
         case '14':
             for y in range(image.height):
                 x_pixels = []
@@ -143,7 +157,38 @@ def change_image(change_type, image, data):
                     y_pixels.append(pixel)
                 for y in range(image.height):
                     data[x, y] = y_pixels[image.height-y-1]
-
+            image.save("image_out.png")
+        case '15':
+            rotated_image = Image.new(mode="RGB", size=(image.height, image.width))
+            rotated_image_data = rotated_image.load()
+            image_rows = []
+            for y in range(image.height):
+                row_data = []
+                for x in range(image.width):
+                    pixel = data[x, y]
+                    row_data.append(pixel)
+                image_rows.append(row_data)
+            for y in range(rotated_image.height):
+                for x in range(rotated_image.width):
+                    pixel = image_rows[x][y]
+                    rotated_image_data[x, y] = pixel
+            rotated_image.save("image_out.png")
+        case '16':
+            rotated_image = Image.new(mode="RGB", size=(image.height, image.width))
+            rotated_image_data = rotated_image.load()
+            image_rows = []
+            for y in range(image.height):
+                row_data = []
+                for x in range(image.width):
+                    pixel = data[x, y]
+                    row_data.append(pixel)
+                image_rows.append(row_data)
+            for y in range(rotated_image.height):
+                for x in range(rotated_image.width):
+                    pixel = image_rows[rotated_image.width-1-x][y]
+                    rotated_image_data[x, y] = pixel
+            rotated_image.save("image_out.png")
+    quit()
 
 def main_menu():
     print("What kind of change would you like to make?")
@@ -168,7 +213,9 @@ def main_menu():
     options_list = ["Normal", "Greyscale corrected", "Greyscale", "Color Isolation Red",
                     "Color Isolation Green", "Color Isolation Blue", "Invert", "Blind Fitler",
                     "X-axis Mirror (Left)", "X-axis Mirror (Right)", "Y-axis Mirror (Top)",
-                    "Y-axis Mirror (Bottom)", "Flip X-axis", "Flip Y-axis", "Flip Diagonal", "Quit/q"]
+                    "Y-axis Mirror (Bottom)", "Flip X-axis", "Flip Y-axis", "Flip Diagonal",
+                    "Rotate 90(Clockwise)", "Rotate 90(Counter-Clickwise)",
+                    "Quit/q"]
     column_height = len(options_list)//3
     extra_options = len(options_list) % 3
     if extra_options == 0:
@@ -190,7 +237,6 @@ def main_menu():
     change_type = input("Change: ").strip()
     print(f"Selected Change: {options_list[int(change_type)]}")
     change_image(change_type, image, data)
-    image.save("image_out.png")
 
 
 if __name__ == "__main__":
