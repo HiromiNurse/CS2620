@@ -84,7 +84,7 @@ def change_image(change_type, image, data):
         case '7':
             for y in range(image.height):
                 for x in range(image.width):
-                    data[x, y] = (5,6,7)
+                    data[x, y] = (5, 6, 7)
             image.save("image_out.png")
         case '8':
             for y in range(image.height):
@@ -93,7 +93,7 @@ def change_image(change_type, image, data):
                     red = pixel[0]
                     green = pixel[1]
                     blue = pixel[2]
-                    data[image.width-x-1,y] = (red, green, blue)
+                    data[image.width-x-1, y] = (red, green, blue)
             image.save("image_out.png")
         case '9':
             for y in range(image.height):
@@ -103,7 +103,7 @@ def change_image(change_type, image, data):
                     green = pixel[1]
                     blue = pixel[2]
                     if x >= (image.width//2):
-                        data[image.width -1-x, y] = (red, green, blue)
+                        data[image.width - 1 - x, y] = (red, green, blue)
             image.save("image_out.png")
         case '10':
             for y in range(image.height):
@@ -112,7 +112,7 @@ def change_image(change_type, image, data):
                     red = pixel[0]
                     green = pixel[1]
                     blue = pixel[2]
-                    data[x,image.height-1- y] = (red, green, blue)
+                    data[x, image.height-1 - y] = (red, green, blue)
             image.save("image_out.png")
         case '11':
             for y in range(image.height):
@@ -122,7 +122,7 @@ def change_image(change_type, image, data):
                     green = pixel[1]
                     blue = pixel[2]
                     if y >= (image.height // 2):
-                        data[x,image.height-1-y] = (red, green, blue)
+                        data[x, image.height-1-y] = (red, green, blue)
             image.save("image_out.png")
         case '12':
             for y in range(image.height):
@@ -161,34 +161,21 @@ def change_image(change_type, image, data):
         case '15':
             rotated_image = Image.new(mode="RGB", size=(image.height, image.width))
             rotated_image_data = rotated_image.load()
-            image_rows = []
             for y in range(image.height):
-                row_data = []
                 for x in range(image.width):
                     pixel = data[x, y]
-                    row_data.append(pixel)
-                image_rows.append(row_data)
-            for y in range(rotated_image.height):
-                for x in range(rotated_image.width):
-                    pixel = image_rows[x][y]
-                    rotated_image_data[x, y] = pixel
+                    rotated_image_data[rotated_image.width-1-y, x] = pixel
             rotated_image.save("image_out.png")
         case '16':
             rotated_image = Image.new(mode="RGB", size=(image.height, image.width))
             rotated_image_data = rotated_image.load()
-            image_rows = []
             for y in range(image.height):
-                row_data = []
                 for x in range(image.width):
                     pixel = data[x, y]
-                    row_data.append(pixel)
-                image_rows.append(row_data)
-            for y in range(rotated_image.height):
-                for x in range(rotated_image.width):
-                    pixel = image_rows[rotated_image.width-1-x][y]
-                    rotated_image_data[x, y] = pixel
-            rotated_image.save("image_out.png")
+                    rotated_image_data[y, image.width - 1 - x] = pixel
+            rotated_image.save("image_out.jpg")
     quit()
+
 
 def main_menu():
     print("What kind of change would you like to make?")
@@ -209,12 +196,11 @@ def main_menu():
     print(f"Selected Image: {selected_image}")
     print("What kind of change would you like to make?")
 
-    number = 0
     options_list = ["Normal", "Greyscale corrected", "Greyscale", "Color Isolation Red",
-                    "Color Isolation Green", "Color Isolation Blue", "Invert", "Blind Fitler",
+                    "Color Isolation Green", "Color Isolation Blue", "Invert", "Blind Filter",
                     "X-axis Mirror (Left)", "X-axis Mirror (Right)", "Y-axis Mirror (Top)",
                     "Y-axis Mirror (Bottom)", "Flip X-axis", "Flip Y-axis", "Flip Diagonal",
-                    "Rotate 90(Clockwise)", "Rotate 90(Counter-Clickwise)",
+                    "Rotate 90(Clockwise)", "Rotate 90(Counter-Clockwise)",
                     "Quit/q"]
     column_height = len(options_list)//3
     extra_options = len(options_list) % 3
