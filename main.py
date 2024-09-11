@@ -22,7 +22,7 @@ def main_menu():
                         "X-axis Mirror (Left)", "X-axis Mirror (Right)", "Y-axis Mirror (Top)",
                         "Y-axis Mirror (Bottom)", "Flip X-axis", "Flip Y-axis", "Flip Diagonal",
                         "Rotate 90(Clockwise)", "Rotate 90(Counter-Clockwise)", "Diagonal Mirror (Top Right)",
-                        "Diagonal Mirror (Bottom Left)",
+                        "Diagonal Mirror (Bottom Left)", "Transform", "Scale", 
                         "Quit/q"]
 
         column_height = len(options_list) // 3
@@ -86,6 +86,10 @@ def main_menu():
                 new_image = diagonalMirrorT(image)
             case '18':
                 new_image = diagonalMirrorB(image)
+            case '19':
+                new_image = transform(image)
+            case '20':
+                new_image = scale(image)
 
             case _:
                 print("Not an option. Quitting...")
