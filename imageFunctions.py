@@ -353,9 +353,13 @@ def transform(image):
 
     if cin.strip().lower() == "width":
         c = int(image.width - 1)
+    elif cin.strip().lower() == "height":
+        c = int(image.height - 1)
     if fin.strip().lower() == "height":
         f = int(image.height - 1)
-    translated_image = Image.new("RGB", size=((image.width), (image.height)))
+    elif fin.strip().lower() == "width":
+        f = int(image.width - 1)
+    translated_image = Image.new("RGB", size=(image.width, image.height))
     new_data = translated_image.load()
     for y in range(image.height):
         for x in range(image.width):
