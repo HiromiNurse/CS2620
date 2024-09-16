@@ -22,7 +22,8 @@ def main_menu():
                         "X-axis Mirror (Left)", "X-axis Mirror (Right)", "Y-axis Mirror (Top)",
                         "Y-axis Mirror (Bottom)", "Flip X-axis", "Flip Y-axis", "Flip Diagonal",
                         "Rotate 90(Clockwise)", "Rotate 90(Counter-Clockwise)", "Diagonal Mirror (Top Right)",
-                        "Diagonal Mirror (Bottom Left)", "Transform", "Scale", 
+                        "Diagonal Mirror (Bottom Left)", "Transform", "Scale", "Arbitrary Rotation",
+                        "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)",
                         "Quit/q"]
 
         column_height = len(options_list) // 3
@@ -90,6 +91,12 @@ def main_menu():
                 new_image = transform(image)
             case '20':
                 new_image = scale(image)
+            case '21':
+                new_image = rotateBigger(image)
+            case '22':
+                new_image = rotateCutoff(image)
+            case '23':
+                new_image = rotateSmallest(image)
 
             case _:
                 print("Not an option. Quitting...")

@@ -1,4 +1,5 @@
 from PIL import Image
+from math import radians, cos, sin
 
 
 def greyscale_Corrected(image):
@@ -203,37 +204,132 @@ def rotateCClockwise(image):
             rotated_image_data[y, image.width - 1 - x] = pixel
     return rotated_image
 
+
 # Rotates the image and adds background in the new whitespace
 # Fix later 
 def rotateBigger(image):
-    data = image.load()
-    degrees = int(input("Rotation in degrees: "))
+    image = image.convert("RGBA")
+    width, height = image.size
+    angle = int(input("Rotation amount (in degrees):"))
+    angle_radians = radians(angle)
+
+    new_width = int(abs(width * cos(angle_radians)) + abs(height * sin(angle_radians)))
+    new_height = int(abs(height * cos(angle_radians)) + abs(width * sin(angle_radians)))
+
+    rotated_image = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 255))
+    pixels_new = rotated_image.load()
+
+    xCenter, yCenter = width // 2, height // 2
+    xCenterNew, yCenterNew = new_width // 2, new_height // 2
+
+    for y in range(new_height):
+        for x in range(new_width):
+            x_old = int((x - xCenterNew) * cos(-angle_radians) - (y - yCenterNew) * sin(-angle_radians) + xCenter)
+            y_old = int((x - xCenterNew) * sin(-angle_radians) + (y - yCenterNew) * cos(-angle_radians) + yCenter)
+
+            if 0 <= x_old < width and 0 <= y_old < height:
+                pixels_new[x, y] = image.getpixel((x_old, y_old))
+
+    return rotated_image
+
+
+def how_did_this_happen(image):
+    image = image.convert("RGBA")
+    width, height = image.size
+    angle = int(input("Rotation amount (in degrees):"))
+    angle_radians = radians(angle)
+
+    new_width = int(abs(width * cos(angle_radians)) + abs(height * sin(angle_radians)))
+    new_height = int(abs(width * cos(angle_radians)) + abs(height * sin(angle_radians)))
+
+    rotated_image = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
+    pixels_new = rotated_image.load()
+
+    xCenter, yCenter = width // 2, height // 2
+    xCenterNew, yCenterNew = new_width // 2, new_height // 2
+
+    for y in range(new_height):
+        for x in range(new_width):
+            x_old = int((x - xCenterNew) * cos(-angle_radians) - (y - yCenterNew) * sin(-angle_radians) + xCenter)
+            y_old = int((x - xCenterNew) * sin(-angle_radians) - (y - yCenterNew) * cos(-angle_radians) + xCenter)
+
+            if 0 <= x_old < width and 0 <= y_old < height:
+                pixels_new[x, y] = image.getpixel((x_old, y_old))
+
+    return rotated_image
 
 
 # Rotates and only keeps the original size of the image
 def rotateCutoff(image):
-    data = image.load()
+    width, height = image.size
+    angle = int(input("Rotation angle in degrees: "))
+    angle_radians = radians(angle)
+
+    rotated_image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+
+    pixels_new = rotated_image.load()
+
+    xCenter, yCenter = width // 2, height // 2
+    for y in range(height):
+        for x in range(width):
+            x_old = int((x - xCenter) * cos(-angle_radians) - (y - yCenter) * sin(-angle_radians) + xCenter)
+            y_old = int((x - xCenter) * sin(-angle_radians) + (y - yCenter) * cos(-angle_radians) + yCenter)
+
+            if 0 <= x_old < width and 0 <= y_old < height:
+                pixels_new[x, y] = image.getpixel((x_old, y_old))
+
+    return rotated_image
+
 
 # Rotates and takes the smallest window fitting all of image
 def rotateSmallest(image):
-    data = image.load()
+    image.convert("RGBA")
+    width, height = image.size
+    aspect_ratio = width / height
+
+    angle = int(input("Rotation angle in degrees: "))
+    angle_radians = radians(angle)
+
+    rotated_image = image.rotate(angle, expand=True, fillcolor = (0, 0, 0, 0))
+    new_width, new_height = rotated_image.size
+
+    cos_angle = abs(cos(angle_radians))
+    sin_angle = abs(sin(angle_radians))
+
+    new_w = width * cos_angle + height * sin_angle
+    new_h = height * cos_angle + width * sin_angle
+
+    crop_w = int(min(new_w, new_h * aspect_ratio))
+    crop_h = int(min(new_h, new_w / aspect_ratio))
+
+    left = (new_width - crop_w) // 2
+    right = left + crop_w
+    top = (new_height - crop_h) // 2
+    bottom = top + crop_h
+
+    final_product = rotated_image.crop((left, top, right, bottom))
+
+    return final_product
+
+
 
 def translation(image):
     data = image.load()
     dx = int(input("Change in x: "))
     dy = int(input("Change in y: "))
-    translated_image = Image.new("RGB", size=((image.width+dx), (image.height+dy)))
+    translated_image = Image.new("RGB", size=((image.width + dx), (image.height + dy)))
     new_data = translated_image.load()
     for y in range(image.height):
         for x in range(image.width):
             pixel = data[x, y]
-            new_data[x+dx, y+dy] = pixel
+            new_data[x + dx, y + dy] = pixel
     return translated_image
+
 
 def scale(image):
     data = image.load()
     scaleSize = int(input("Scale Amount: "))
-    new_image = Image.new("RGB", size=(int(image.width*scaleSize), int(image.height*scaleSize)))
+    new_image = Image.new("RGB", size=(int(image.width * scaleSize), int(image.height * scaleSize)))
     new_data = new_image.load()
     for y in range(new_image.height):
         for x in range(new_image.width):
@@ -244,6 +340,7 @@ def scale(image):
 
             new_data[x, y] = pixel
     return new_image
+
 
 def transform(image):
     data = image.load()
