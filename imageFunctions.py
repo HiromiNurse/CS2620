@@ -344,12 +344,17 @@ def scale(image):
 
 def transform(image):
     data = image.load()
-    a = int(input("a: "))
-    b = int(input("b: "))
-    c = int(input("c: "))
-    d = int(input("d: "))
-    e = int(input("e: "))
-    f = int(input("f: "))
+    a = int(input("x scale: ")) # x scale
+    b = int(input("x rotation: ")) # x rotation
+    cin = str(input("x translation: ")) # x translation
+    d = int(input("y rotation: ")) # y rotation
+    e = int(input("y scale: ")) # y scale
+    fin = str(input("y translation: ")) # y translation
+
+    if cin.strip().lower() == "width":
+        c = int(image.width - 1)
+    if fin.strip().lower() == "height":
+        f = int(image.height - 1)
     translated_image = Image.new("RGB", size=((image.width), (image.height)))
     new_data = translated_image.load()
     for y in range(image.height):
@@ -362,3 +367,51 @@ def transform(image):
             new_data[new_x, new_y] = pixel
 
     return translated_image
+
+def blur5(image):
+    width, height = image.size
+    returned_image = Image.new("RGB", (width, height))
+    new_pixels = returned_image.load()
+
+    data = image.load()
+
+    if width % 5 == 0 and height % 5 == 0:
+        for y in range(0, height, 5):
+            for x in range(0, width, 5):
+                totalRed = 0
+                totalGreen = 0
+                totalBlue = 0
+                for i in range(6):
+                    for j in range(6):
+                        red, green, blue = data[x,y]
+                        totalRed += red
+                        totalGreen += green
+                        totalBlue += blue
+                averageRed = int(totalRed / 25)
+                averageGreen = int(totalGreen / 25)
+                averageBlue = int(totalBlue / 25)
+                for i in range(6):
+                    for j in range(6):
+                        data[x+i, y+j] = (averageRed, averageGreen, averageBlue)
+    else: 
+        xRemainder = width % 5
+        yRemainder = height % 5
+        for y in range(0, height-yRemainder, 5):
+            for x in range(0, width-xRemainder, 5):
+                totalRed = 0
+                totalGreen = 0
+                totalBlue = 0
+                for i in range(6):
+                    for j in range(6):
+                        red, green, blue = data[x,y]
+                        totalRed += red
+                        totalGreen += green
+                        totalBlue += blue
+                averageRed = int(totalRed / 25)
+                averageGreen = int(totalGreen / 25)
+                averageBlue = int(totalBlue / 25)
+                for i in range(6):
+                    for j in range(6):
+                        if x+i < width and y+j < height:
+                            new_pixels[x+i, y+j] = (averageRed, averageGreen, averageBlue)
+    return returned_image

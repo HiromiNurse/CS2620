@@ -3,7 +3,7 @@ from imageFunctions import *
 
 
 def main_menu():
-    try:
+    # try:
         print("What kind of change would you like to make?")
         image_list = [f for f in listdir() if ".jpg" in f]
         image_list.append("Quit")
@@ -23,28 +23,29 @@ def main_menu():
                         "Y-axis Mirror (Bottom)", "Flip X-axis", "Flip Y-axis", "Flip Diagonal",
                         "Rotate 90(Clockwise)", "Rotate 90(Counter-Clockwise)", "Diagonal Mirror (Top Right)",
                         "Diagonal Mirror (Bottom Left)", "Transform", "Scale", "Arbitrary Rotation",
-                        "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)",
+                        "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)", "Idk man",
+                        "Blur",
                         "Quit/q"]
 
         column_height = len(options_list) // 3
         extra_options = len(options_list) % 3
         if extra_options == 0:
             for i in range(0, len(options_list) // 3):
-                print(f"{i:3}: {options_list[i]:25}{(i + column_height):3}: {options_list[i + column_height]:25}"
-                      f"{(i + (column_height * 2)):3}: {options_list[i + (column_height * 2)]:25}")
+                print(f"{i:3}: {options_list[i]:30}{(i + column_height):3}: {options_list[i + column_height]:30}"
+                      f"{(i + (column_height * 2)):3}: {options_list[i + (column_height * 2)]:30}")
         elif extra_options == 1:
             for i in range(0, len(options_list) // 3):
                 print(
-                    f"{i:3}: {options_list[i]:25}{(i + column_height + 1):3}: {options_list[i + 1 + column_height]:25}"
-                    f"{(i + (column_height * 2) + 1):3}: {options_list[i + (column_height * 2) + 1]:25}")
-            print(f"{column_height:3}: {options_list[column_height]:25}")
+                    f"{i:3}: {options_list[i]:30}{(i + column_height + 1):3}: {options_list[i + 1 + column_height]:30}"
+                    f"{(i + (column_height * 2) + 1):3}: {options_list[i + (column_height * 2) + 1]:30}")
+            print(f"{column_height:3}: {options_list[column_height]:30}")
         elif extra_options == 2:
             for i in range(0, len(options_list) // 3):
                 print(
-                    f"{i:3}: {options_list[i]:25}{(i + column_height + 1):3}: {options_list[i + 1 + column_height]:25}"
-                    f"{(i + (column_height * 2) + 2):3}: {options_list[i + (column_height * 2) + 2]:25}")
-            print(f"{column_height:3}: {options_list[column_height]:25}"
-                  f"{(column_height * 2) + 1:3}: {options_list[(column_height * 2) + 1]:25}")
+                    f"{i:3}: {options_list[i]:30}{(i + column_height + 1):3}: {options_list[i + 1 + column_height]:30}"
+                    f"{(i + (column_height * 2) + 2):3}: {options_list[i + (column_height * 2) + 2]:30}")
+            print(f"{column_height:3}: {options_list[column_height]:30}"
+                  f"{(column_height * 2) + 1:3}: {options_list[(column_height * 2) + 1]:30}")
 
         change_type = input("Change: ").strip()
         print(f"Selected Change: {options_list[int(change_type)]}")
@@ -97,6 +98,10 @@ def main_menu():
                 new_image = rotateCutoff(image)
             case '23':
                 new_image = rotateSmallest(image)
+            case '24':
+                new_image = how_did_this_happen(image)
+            case '25':
+                new_image = blur5(image)
 
             case _:
                 print("Not an option. Quitting...")
@@ -106,10 +111,10 @@ def main_menu():
             print("Saving...")
             new_image.save("output_image.png")
 
-    except ValueError:
-        print("Invalid input. Try again.")
-        main_menu()
-        return
+    # except ValueError:
+    #     print("Invalid input. Try again.")
+    #     main_menu()
+    #     return
 
 
 if __name__ == "__main__":
