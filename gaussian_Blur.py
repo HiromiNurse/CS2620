@@ -41,11 +41,49 @@ def applyKernelNoPadding(image, kernel):
     for y in range(kernel_radius, height - kernel_radius):
         for x in range(kernel_radius, width - kernel_radius):
             for z in range(3):
-                output_image[x - kernel_radius, y - kernel_radius, z] = np.sum(
-                    kernel * image_array[x - kernel_radius:x + kernel_radius + 1, y - kernel_radius: y + kernel_radius
-                                                                                                     + 1, z]
+                output_image[y - kernel_radius, x - kernel_radius, z] = np.sum(
+                    kernel * image_array[y - kernel_radius:y + kernel_radius + 1,
+                             x - kernel_radius:x + kernel_radius + 1, z]
                 )
 
     output_image = np.clip(output_image, 0, 255)
 
     return output_image.astype(np.uint8)
+
+
+def kernelShenanigan():
+    kernels = {
+        "edge": [
+            [0, -1, 0],
+            [-1, 4, -1],
+            [0, -1, 0]
+        ],
+        "goon": [
+            [-1, -1, -1],
+            [-1, 8, -1],
+            [-1, -1, -1]
+        ],
+        "unsharp": [
+            [1 * -(1/256), 4 * -(1/256), 6 * -(1/256), 4 * -(1/256), 1 * -(1/256)],
+            [4 * -(1/256), 16 * -(1/256), 24 * -(1/256), 16 * -(1/256), 4 * -(1/256)],
+            [6 * -(1/256), 24 * -(1/256), -476 * -(1/256), 24 * -(1/256), 6 * -(1/256)],
+            [4 * -(1/256), 16 * -(1/256), 24 * -(1/256), 16 * -(1/256), 4 * -(1/256)],
+            [1 * -(1/256), 4 * -(1/256), 6 * -(1/256), 4 * -(1/256), 1 * -(1/256)]
+        ], # multiply by -1/256
+        "sharpen": [
+            [0, -1, 0],
+            [-1, 5, -1],
+            [0, -1, 0]
+        ]
+    }
+    keys = list(kernels.keys())
+    count = 0
+    for key in kernels:
+        print(f"{count:5}: {key:20}")
+        count += 1
+    select = int(input("Select the number corresponding to the kernel you want to use: "))
+    if 0 <= select < len(keys):
+        return kernels[keys[select]]
+    else:
+        print("Invalid Selection")
+        return None
