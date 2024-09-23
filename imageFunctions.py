@@ -1,5 +1,6 @@
 from PIL import Image
 from math import radians, cos, sin
+from gaussian_Blur import *
 
 
 def greyscale_Corrected(image):
@@ -372,6 +373,7 @@ def transform(image):
 
     return translated_image
 
+<<<<<<< Updated upstream
 def blur5(image):
     width, height = image.size
     returned_image = Image.new("RGB", (width, height))
@@ -419,3 +421,23 @@ def blur5(image):
                         if x+i < width and y+j < height:
                             new_pixels[x+i, y+j] = (averageRed, averageGreen, averageBlue)
     return returned_image
+=======
+def blurFunction(image):
+    fuzzyness = float(input("Blur amount: "))
+    kernel_size = int(input("Kernel size: "))
+    kernel = gaussian_kernel(kernel_size, fuzzyness)
+
+    blurredImageArray = applyKernel(image, kernel)
+
+    return Image.fromarray(blurredImageArray)
+
+
+def blurFunctionNP(image):
+    fuzzyness = float(input("Blur amount: "))
+    kernel_size = int(input("Kernel size: "))
+    kernel = gaussian_kernel(kernel_size, fuzzyness)
+
+    blurredImageArray = applyKernelNoPadding(image, kernel)
+
+    return Image.fromarray(blurredImageArray)
+>>>>>>> Stashed changes
