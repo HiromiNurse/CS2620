@@ -83,6 +83,8 @@ def kernelShenanigan():
         count += 1
     select = int(input("Select the number corresponding to the kernel you want to use: "))
     if 0 <= select < len(keys):
+        print(f"Selected Kernel: {keys[select]}")
+        print(f"{keys[select]}ing the image...")
         return kernels[keys[select]]
     else:
         print("Invalid Selection")

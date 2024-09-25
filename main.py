@@ -24,7 +24,7 @@ def main_menu():
                     "Rotate 90(Clockwise)", "Rotate 90(Counter-Clockwise)", "Diagonal Mirror (Top Right)",
                     "Diagonal Mirror (Bottom Left)", "Transform", "Scale", "Arbitrary Rotation",
                     "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)", "Gaussian Blur (no pad)",
-                    "Gaussian Blur (Padded)", "Kernel Assortment",
+                    "Gaussian Blur (Padded)", "Kernel Assortment", "Rotation About",
                     "Quit/q"]
 
     column_height = len(options_list) // 3
@@ -104,6 +104,8 @@ def main_menu():
             new_image = blurFunction(image)
         case '26':
             new_image = customKernel(image)
+        case '27':
+            new_image = rotationAbout(image)
 
         case _:
             print("Not an option. Quitting...")

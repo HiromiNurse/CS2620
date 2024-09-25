@@ -213,11 +213,14 @@ def rotateBigger(image):
     width, height = image.size
     angle = int(input("Rotation amount (in degrees):"))
     angle_radians = radians(angle)
+    
+    cosine = cos(-angle_radians)
+    sine = sin(-angle_radians)
 
-    new_width = int(abs(width * cos(angle_radians)) + abs(height * sin(angle_radians)))
-    new_height = int(abs(height * cos(angle_radians)) + abs(width * sin(angle_radians)))
+    new_width = int(abs(width * -cosine) + abs(height * -sine))
+    new_height = int(abs(height * -cosine) + abs(width * -sine))
 
-    rotated_image = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 255))
+    rotated_image = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
     pixels_new = rotated_image.load()
 
     xCenter, yCenter = width // 2, height // 2
@@ -240,8 +243,11 @@ def how_did_this_happen(image):
     angle = int(input("Rotation amount (in degrees):"))
     angle_radians = radians(angle)
 
-    new_width = int(abs(width * cos(angle_radians)) + abs(height * sin(angle_radians)))
-    new_height = int(abs(width * cos(angle_radians)) + abs(height * sin(angle_radians)))
+    cosine = cos(-angle_radians)
+    sine = sin(-angle_radians)
+
+    new_width = int(abs(width * -cosine) + abs(height * -sine))
+    new_height = int(abs(width * -cosine) + abs(height * -sine))
 
     rotated_image = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
     pixels_new = rotated_image.load()
@@ -251,8 +257,8 @@ def how_did_this_happen(image):
 
     for y in range(new_height):
         for x in range(new_width):
-            x_old = int((x - xCenterNew) * cos(-angle_radians) - (y - yCenterNew) * sin(-angle_radians) + xCenter)
-            y_old = int((x - xCenterNew) * sin(-angle_radians) - (y - yCenterNew) * cos(-angle_radians) + xCenter)
+            x_old = int((x - xCenterNew) * cosine - (y - yCenterNew) * sine + xCenter)
+            y_old = int((x - xCenterNew) * sine - (y - yCenterNew) * cosine + xCenter)
 
             if 0 <= x_old < width and 0 <= y_old < height:
                 pixels_new[x, y] = image.getpixel((x_old, y_old))
@@ -270,11 +276,14 @@ def rotateCutoff(image):
 
     pixels_new = rotated_image.load()
 
+    cosine = cos(-angle_radians)
+    sine = sin(-angle_radians)
+
     xCenter, yCenter = width // 2, height // 2
     for y in range(height):
         for x in range(width):
-            x_old = int((x - xCenter) * cos(-angle_radians) - (y - yCenter) * sin(-angle_radians) + xCenter)
-            y_old = int((x - xCenter) * sin(-angle_radians) + (y - yCenter) * cos(-angle_radians) + yCenter)
+            x_old = int((x - xCenter) * cosine - (y - yCenter) * sine + xCenter)
+            y_old = int((x - xCenter) * sine + (y - yCenter) * cosine + yCenter)
 
             if 0 <= x_old < width and 0 <= y_old < height:
                 pixels_new[x, y] = image.getpixel((x_old, y_old))
@@ -312,6 +321,36 @@ def rotateSmallest(image):
 
     return final_product
 
+
+def rotationAbout(image):
+    originx = int(input("X coord to rotate about: "))
+    originy = int(input("Y coord to rotate about: "))
+    image = image.convert("RGBA")
+    width, height = image.size
+    angle = int(input("Rotation amount (in degrees):"))
+    angle_radians = radians(angle)
+    
+    cosine = cos(-angle_radians)
+    sine = sin(-angle_radians)
+
+    new_width = int(abs(width * -cosine) + abs(height * -sine))
+    new_height = int(abs(height * -cosine) + abs(width * -sine))
+
+    rotated_image = Image.new("RGBA", (new_width, new_height), (0, 0, 0, 0))
+    pixels_new = rotated_image.load()
+
+    xCenter, yCenter = width // 2 + originx, height // 2 + originy
+    xCenterNew, yCenterNew = new_width // 2, new_height // 2
+
+    for y in range(new_height):
+        for x in range(new_width):
+            x_old = int((x - xCenterNew) * cos(-angle_radians) - (y - yCenterNew) * sin(-angle_radians) + xCenter)
+            y_old = int((x - xCenterNew) * sin(-angle_radians) + (y - yCenterNew) * cos(-angle_radians) + yCenter)
+
+            if 0 <= x_old < width and 0 <= y_old < height:
+                pixels_new[x, y] = image.getpixel((x_old, y_old))
+
+    return rotated_image
 
 
 def translation(image):
