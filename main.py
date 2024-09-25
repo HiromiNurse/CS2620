@@ -1,5 +1,6 @@
 from os import listdir
 from imageFunctions import *
+from hiding import *
 
 
 def main_menu():
@@ -24,7 +25,8 @@ def main_menu():
                     "Rotate 90(Clockwise)", "Rotate 90(Counter-Clockwise)", "Diagonal Mirror (Top Right)",
                     "Diagonal Mirror (Bottom Left)", "Transform", "Scale", "Arbitrary Rotation",
                     "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)", "Gaussian Blur (no pad)",
-                    "Gaussian Blur (Padded)", "Kernel Assortment", "Rotation About",
+                    "Gaussian Blur (Padded)", "Kernel Assortment", "Rotation About", "Hide QR Code",
+                    "Read QR Code",
                     "Quit/q"]
 
     column_height = len(options_list) // 3
@@ -106,6 +108,12 @@ def main_menu():
             new_image = customKernel(image)
         case '27':
             new_image = rotationAbout(image)
+        case '28':
+            new_image = hideQR(image)
+            new_image.save("encoded_image.png")
+            return
+        case '29':
+            new_image = decodeQR()
 
         case _:
             print("Not an option. Quitting...")

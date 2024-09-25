@@ -29,6 +29,7 @@ def applyKernel(image, kernel):
 
     return output_image.astype(np.uint8)
 
+
 def applyKernelNoPadding(image, kernel):
     image_array = np.array(image)
     kernel_size = len(kernel)
