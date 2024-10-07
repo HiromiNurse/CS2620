@@ -26,7 +26,7 @@ def main_menu():
                     "Diagonal Mirror (Bottom Left)", "Transform", "Scale", "Arbitrary Rotation",
                     "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)", "Gaussian Blur (no pad)",
                     "Gaussian Blur (Padded)", "Kernel Assortment", "Rotation About", "Hide QR Code",
-                    "Read QR Code",
+                    "Hide QR better", "Read QR Code", 
                     "Quit/q"]
 
     column_height = len(options_list) // 3
@@ -113,6 +113,8 @@ def main_menu():
             new_image.save("encoded_image.png")
             return
         case '29':
+            new_image = hide_Qr_Linear(image)
+        case '30':
             new_image = decodeQR()
 
         case _:

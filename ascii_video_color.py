@@ -35,6 +35,8 @@ def get_ascii(image, brightness_factor=1.5):
     return ascii_str
 
 
+# add gradient correction for ascii
+# basically adds directionality
 ASCII_CHARS = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
 screen_number = int(input("Which monitor will be the input? (0-3): "))
 camera = dxcam.create(device_idx=0, output_idx=screen_number)
