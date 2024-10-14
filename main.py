@@ -1,23 +1,10 @@
-from os import listdir
 from imageFunctions import *
 from hiding import *
+from gaussian_Blur import *
+from edging import *
 
 
-def main_menu():
-    # try:
-    print("What kind of change would you like to make?")
-    image_list = [f for f in listdir() if ".jpg" in f]
-    image_list.append("Quit")
-    image_number = 0
-    for image in image_list:
-        print(f"{image_number}: {image}")
-        image_number += 1
-    selected_image_number = int(input("Input the number corresponding to the image name: "))
-    selected_image = image_list[selected_image_number]
-    if image_list[selected_image_number] == "Quit":
-        return
-    image = Image.open(selected_image)
-
+def main():
     options_list = ["Normal", "Greyscale corrected", "Greyscale", "Color Isolation Red",
                     "Color Isolation Green", "Color Isolation Blue", "Invert", "Blind Filter",
                     "X-axis Mirror (Left)", "X-axis Mirror (Right)", "Y-axis Mirror (Top)",
@@ -26,11 +13,13 @@ def main_menu():
                     "Diagonal Mirror (Bottom Left)", "Transform", "Scale", "Arbitrary Rotation",
                     "Arbitrary Rotation (Cutoff)", "Arbitrary Rotation (inscribed)", "Gaussian Blur (no pad)",
                     "Gaussian Blur (Padded)", "Kernel Assortment", "Rotation About", "Hide QR Code",
-                    "Read QR Code",
+                    "Hide QR better", "Read QR Code", 
                     "Quit/q"]
 
     column_height = len(options_list) // 3
     extra_options = len(options_list) % 3
+
+    print("What kind of change would you like to make?")
     if extra_options == 0:
         for i in range(0, len(options_list) // 3):
             print(f"{i:3}: {options_list[i]:35}{(i + column_height):3}: {options_list[i + column_height]:35}"
@@ -51,7 +40,25 @@ def main_menu():
 
     change_type = input("Change: ").strip()
     print(f"Selected Change: {options_list[int(change_type)]}")
-    match change_type:
+
+
+    image_list = [f for f in listdir() if ".jpg" in f]
+    image_list.append("Quit")
+    image_number = 0
+    for image in image_list:
+        print(f"{image_number}: {image}")
+        image_number += 1
+    selected_image_number = int(input("Input the number corresponding to the image name: "))
+    selected_image = image_list[selected_image_number]
+    if image_list[selected_image_number] == "Quit":
+        return
+    image = Image.open(selected_image)
+
+    run_function(change_type, image)
+
+
+def run_function(change_number, image):
+    match change_number:
         case '0':
             image.save("output_image.png")
         case '1':
@@ -113,21 +120,19 @@ def main_menu():
             new_image.save("encoded_image.png")
             return
         case '29':
+            new_image = hide_Qr_Linear(image)
+        case '30':
             new_image = decodeQR()
 
         case _:
             print("Not an option. Quitting...")
             return
 
-    if change_type != '0':
+    if change_number != '0':
         print("Saving...")
         new_image.save("output_image.png")
 
-    # except ValueError:
-    #     print("Invalid input. Try again.")
-    #     main_menu()
-    #     return
-
 
 if __name__ == "__main__":
-    main_menu()
+    main()
+    
