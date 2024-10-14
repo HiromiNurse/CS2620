@@ -2,13 +2,17 @@ import dxcam
 from PIL import Image
 from os import system, get_terminal_size
 
+'''
+Add Vectoring? Make it so edges are detected and accounted for
+'''
 
 def resize(image, new_width=100):
-    width, lines = get_terminal_size()
-    new_width = width
-    old_width, old_height = image.size
-    new_height = new_width * old_height // old_width
-    return image.resize((new_width, new_height))
+    width, height = get_terminal_size()
+    # new_width = width
+    # old_width, old_height = image.size
+    # new_height = new_width * old_height // old_width
+    # return image.resize((new_width, new_height))
+    return image.resize((width, height-5), resample=0)
 
 
 def brighten_color(r, g, b, factor=1.5):
