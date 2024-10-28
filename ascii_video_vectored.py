@@ -36,10 +36,10 @@ def get_ascii(image, brightness_factor=1.0):
 
 
 def get_ascii_single(pixel, brightness_factor = 1.0):
-    r, g, b = pixel
-    r, g, b = brighten_color(r, g, b, brightness_factor)
+    # r, g, b = pixel
+    # r, g, b = brighten_color(r, g, b, brightness_factor)
     ascii_char = ASCII_CHARS[(len(ASCII_CHARS)-1) - (sum(pixel) // 3 * (len(ASCII_CHARS) - 1) // 255)]
-    color_code = rgb_to_ansi(r, g, b)
+    # color_code = rgb_to_ansi(r, g, b)
     # return (f"{color_code}{ascii_char}\033[0m")
     return ascii_char
 
@@ -74,7 +74,6 @@ def convert_picture():
     image = Image.open(image_name)
     # image = resize(image)
     edge_image = image.filter(ImageFilter.FIND_EDGES)
-    edge_image.convert("L")
 
     image_data = image.load()
     edge_data = edge_image.load()
@@ -85,7 +84,7 @@ def convert_picture():
 
     for y in range(height):
         for x in range(width):
-            if edge_data[x,y][0] < 100:
+            if edge_data[x, y][0] < 100:
                 ascii = get_ascii_single(image_data[x, y])
                 image_ascii.append(ascii)
             else:
@@ -108,10 +107,14 @@ def convert_picture():
     ascii_image = ''
 
     for i in range(0, len(image_ascii), width):
-        ascii_image += ''.join(image_ascii[i: i+width])
+        ascii_image += ' '.join(image_ascii[i: i+width]) + "\n"
 
-    with open("text_out.txt", "w") as file:
-        file.write(ascii_image)
+    with open("text_out.txt", "w", encoding="utf-8") as file:
+        for character in ascii_image:
+            if character == "\\":
+                file.write("balls")
+            else:
+                file.write(character)
     
 
 

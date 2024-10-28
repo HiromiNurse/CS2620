@@ -4,11 +4,13 @@ import math
 
 image_start = Image.open("stoat.jpg")
 data_start = image_start.load()
+width, height = image_start.size
 
-image_out = Image.new("RGB", size=(image_start.width, image_start.height))
+image_out = Image.new("RGB", size=(width, height))
 data_out = image_out.load()
+new_width, new_height = image_out.size
 
-min_dimension = min(image_out.width, image_out.height)
+min_dimension = min(new_width, new_height)
 
 for y in range(image_out.height):
     for x in range(image_out.width):
