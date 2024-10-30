@@ -92,7 +92,7 @@ def convert_picture():
                     if edge_data[x, y-1][0] > 100:
                         image_ascii.append("|")
                     elif edge_data[x-1, y-1][0] > 100:
-                        image_ascii.append("\\")
+                        image_ascii.append("V")
                     elif x < width-1:
                         if edge_data[x+1, y-1][0] > 100:
                             image_ascii.append("/")
@@ -107,12 +107,12 @@ def convert_picture():
     ascii_image = ''
 
     for i in range(0, len(image_ascii), width):
-        ascii_image += ' '.join(image_ascii[i: i+width]) + "\n"
+        ascii_image += ''.join(image_ascii[i: i+width]) + "\n"
 
-    with open("text_out.txt", "w", encoding="utf-8") as file:
+    with open("text_out.txt", "w") as file:
         for character in ascii_image:
             if character == "\\":
-                file.write("balls")
+                file.write("b")
             else:
                 file.write(character)
     
