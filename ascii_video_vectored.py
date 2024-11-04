@@ -1,10 +1,8 @@
 # import dxcam
 from PIL import Image, ImageFilter
 from os import system, get_terminal_size
+from imageFunctions import greyscale
 
-'''
-Add Vectoring? Make it so edges are detected and accounted for
-'''
 
 def resize(image):
     width, height = get_terminal_size()
@@ -38,13 +36,16 @@ def get_ascii(image, brightness_factor=1.0):
 def get_ascii_single(pixel, brightness_factor = 1.0):
     # r, g, b = pixel
     # r, g, b = brighten_color(r, g, b, brightness_factor)
-    ascii_char = ASCII_CHARS[(len(ASCII_CHARS)-1) - (sum(pixel) // 3 * (len(ASCII_CHARS) - 1) // 255)]
+    ascii_char = ASCII_CHARS[(len(ASCII_CHARS)-1) 
+                                  - ((sum(pixel) // 3) * (len(ASCII_CHARS) - 1) 
+                                     // 255)]
     # color_code = rgb_to_ansi(r, g, b)
-    # return (f"{color_code}{ascii_char}\033[0m")
+    # return (f"{color_code}{ascii_char}\033[0m)")
     return ascii_char
 
 
 ASCII_CHARS = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
+ASCII_CHARS_blob = "$@B8&WM#*oakbdpqZO0QUXcunxr1?+~,\"`'."
 
 def convert_video():
     screen_number = int(input("Which monitor will be the input? (0-3): "))
@@ -72,9 +73,10 @@ def convert_picture():
     # image_name = input("Image name: ")
     image_name = "skib.jpg"
     image = Image.open(image_name)
-    # image = resize(image)
-    edge_image = image.filter(ImageFilter.FIND_EDGES)
+    image = greyscale(image)
 
+    edge_image = image.filter(ImageFilter.FIND_EDGES)
+    
     image_data = image.load()
     edge_data = edge_image.load()
 
@@ -84,38 +86,31 @@ def convert_picture():
 
     for y in range(height):
         for x in range(width):
-            if edge_data[x, y][0] < 100:
-                ascii = get_ascii_single(image_data[x, y])
-                image_ascii.append(ascii)
-            else:
-                if y > 0:
-                    if edge_data[x, y-1][0] > 100:
-                        image_ascii.append("|")
-                    elif edge_data[x-1, y-1][0] > 100:
-                        image_ascii.append("V")
-                    elif x < width-1:
-                        if edge_data[x+1, y-1][0] > 100:
-                            image_ascii.append("/")
-                        else:
-                            image_ascii.append("|")
-                    elif edge_data[x-1, y][0] > 100:
-                        image_ascii.append("-")
-                    else:
-                        ascii = get_ascii_single(image_data[x, y])
-                        image_ascii.append(ascii)
+            # if edge_data[x, y][0] < 100:
+            image_ascii.append(get_ascii_single(image_data[x, y]))
+            # else:
+            #     if y > 0:
+            #         if edge_data[x, y-1][0] > 100:
+            #             image_ascii.append("|")
+            #         elif edge_data[x-1, y-1][0] > 100:
+            #             image_ascii.append("V")
+            #         elif x < width-1:
+            #             if edge_data[x+1, y-1][0] > 100:
+            #                 image_ascii.append("/")
+            #             else:
+            #                 image_ascii.append("|")
+            #         elif edge_data[x-1, y][0] > 100:
+            #             image_ascii.append("-")
+            #         else:
+            #             ascii = get_ascii_single(image_data[x, y])
+            #             image_ascii.append(ascii)
 
     ascii_image = ''
 
-    for i in range(0, len(image_ascii), width):
-        ascii_image += ''.join(image_ascii[i: i+width]) + "\n"
-
     with open("text_out.txt", "w") as file:
-        for character in ascii_image:
-            if character == "\\":
-                file.write("b")
-            else:
-                file.write(character)
-    
+        for i in range(0, len(image_ascii), width):
+            ascii_image += ''.join(image_ascii[i: i+width]) + "\n"
+            file.write(ascii_image)    
 
 
 if __name__ == "__main__":

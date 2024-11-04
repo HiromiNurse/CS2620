@@ -8,7 +8,7 @@ def nn_interpolation(data, x, y):
 
 
 def interpolate(start, end, percent):
-    return percent * (start - end) + start
+    return (percent * (end - start) + start)
 
 
 def interpolateRGB(start, end, percent):
@@ -27,6 +27,7 @@ def bilinear_interpolation(data, x, y):
     x_start = math.floor(x)
     x_end = x_start + 1
     x_percent = x - x_start
+
     y_start = math.floor(y)
     y_end = y_start + 1
     y_percent = y - y_end
@@ -59,12 +60,12 @@ new_width, new_height = image_out.size
 
 min_dimension = min(new_width, new_height)
 
-for y in range(image_out.height):
-    for x in range(image_out.width):
+for y in range(new_height):
+    for x in range(new_width):
         pixel = data_start[x, y]
 
-        xc = x - image_out.width / 2
-        yc = y - image_start.height / 2
+        xc = x - new_width / 2
+        yc = y - new_height / 2
 
         radius = math.sqrt(xc**2 + yc**2)
         theta = math.atan2(yc, xc)
@@ -76,10 +77,10 @@ for y in range(image_out.height):
         new_x = math.cos(theta)*new_radius*min_dimension/2
         new_y = math.sin(theta)*new_radius*min_dimension/2
 
-        new_x += image_out.width/2
-        new_y += image_out.height/2
+        new_x += new_width/2
+        new_y += new_height/2
 
-        if new_x < 0 or new_x >= image_out.width-1 or new_y < 0 or new_y >= image_out.height-1:
+        if new_x < 0 or new_x >= new_width-1 or new_y < 0 or new_y >= new_height-1:
             # data_out[x, y] = data_start[math.floor(new_x), math.floor(new_y)]
             data_out[x, y] = (0, 0, 0)
         else:
