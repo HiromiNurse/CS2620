@@ -4,6 +4,15 @@ from gaussian_Blur import *
 from os import listdir
 
 
+class working_image:
+    def __init__(self, name="image.jpg"):
+        self.image = image = Image.open(name)
+
+    def corrected_greyscale(self.image):
+        
+
+
+
 def greyscale_Corrected(image):
     data = image.load()
     for y in range(image.height):
@@ -588,3 +597,20 @@ Legacy versions of the qr code hider and reader
 #             else:
 #                 qrData[x, y] = (255, 255, 255)
 #     return qrCode
+
+
+# Color Reduction. Reduce the number of colors on the image
+# Instead fo (255, 0, 0) and (254, 0, 0) just use the first
+def color_reduction(image):
+    pass
+
+
+# Richardson–Lucy deconvolution
+def deconvolution(image):
+    pass
+
+
+# Seam carving algorithm
+# Resizes cutting out un-important sections
+def seam_carved_resize(image):
+    pass
