@@ -71,7 +71,7 @@ def convert_video():
 
 def convert_picture():
     # image_name = input("Image name: ")
-    image_name = "skib.jpg"
+    image_name = "skibidi.jpg"
     image = Image.open(image_name)
     image = greyscale(image)
 
@@ -110,7 +110,7 @@ def convert_picture():
     with open("text_out.txt", "w") as file:
         for i in range(0, len(image_ascii), width):
             ascii_image += ''.join(image_ascii[i: i+width]) + "\n"
-            file.write(ascii_image)    
+        file.write(ascii_image)
 
 
 if __name__ == "__main__":

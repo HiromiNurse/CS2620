@@ -6,12 +6,16 @@ from os import listdir
 
 class working_image:
     def __init__(self, name="image.jpg"):
-        self.image = image = Image.open(name)
+        self.image = Image.open(name)
+        self.width = self.image.width
+        self.height = self.image.height
 
-    def corrected_greyscale(self.image):
-        
-
-
+    def corrected_greyscale(self):
+        data = self.image.load()
+        for y in range(self.height):
+            for x in range(self.width):
+                r, g, b = data[x,y]
+                greyscale_value = int((r * .21) + (g * .71) + (b * .08)) // 3
 
 def greyscale_Corrected(image):
     data = image.load()
