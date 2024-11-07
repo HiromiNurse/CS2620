@@ -2,6 +2,7 @@ from PIL import Image
 from math import radians, cos, sin
 from gaussian_Blur import *
 from os import listdir
+import math
 
 
 class WorkingImage:
@@ -420,7 +421,21 @@ class WorkingImage:
         self.image = self.image.convert("RGBA")
         data = self.image.load()
 
-        qr_code = Image.new("RGB", size=())
+        qr_bits = # Make it so it reads the first 16 bits to get the qr code size
+        qr_size = math.sqrt(qr_bits) + 16
+
+        qr_code = Image.new("RGB", size=(qr_size, qr_size))
+        qr_data = qr_code.load()
+
+        for y in range(self.image.height):
+            for x in range(self.image.width):
+                r, g, b = data[x, y]
+                if (g & 1) == 1:
+                    qr_data[x, y] = (0, 0, 0)
+                else:
+                    qr_data[x, y] = (255, 255, 255)
+        qr_code.save("qr_code.png")
+        qr_code.show()
 
     def qrCodeEncoder(self):
         self.image = self.image.convert("RGB")
@@ -470,7 +485,7 @@ class WorkingImage:
             y_pos = 0
             current_count = 0
             size_corrector = (qry_pos * self.width) + qrx_pos
-            passes = 0
+            passes = 0 # Fix so it always writes 16 bits
             encoded_bits = 0
 
             for y in range(self.height):
