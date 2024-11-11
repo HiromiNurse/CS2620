@@ -11,6 +11,9 @@ class WorkingImage:
         self.width = self.image.width
         self.height = self.image.height
 
+    def save(self, name="image"):
+        self.image.save(
+            "\\Users\\hnurse\\Downloads\\CS2620-main\\test_images\\"+ name + ".png")
 
     def corrected_greyscale(self):
         self.image = self.image.convert("RGB")
@@ -39,9 +42,9 @@ class WorkingImage:
             for x in range(self.width):
                 r, g, b = data[x, y]
 
-                greyscale_value = int(r + g + b) // 3
+                greyscale_value = int((r + g + b) // 3)
 
-                if r> 65 and (r- g) > 15 and (r- b) > 25 and r> greyscale_value:
+                if r > 65 and (r - g) > 15 and (r - b) > 25 and r > greyscale_value:
                     data[x, y] = (r, g, b)
                 else:
                     data[x, y] = (greyscale_value, greyscale_value, greyscale_value)
@@ -177,11 +180,11 @@ class WorkingImage:
                 new_data[x, y] = data[self.width - 1 - x, y]
         self.image = new_image
 
-    def rotateAndEnlarge(self):
+    def rotateAndEnlarge(self, angle=0):
         self.image = self.image.convert("RGBA")
         data = self.image.load()
 
-        angle = int(input()) # Change Later to accomodate gui
+        # angle = int(input()) # Change Later to accomodate gui
         radian_angle = radians(angle)
 
         cosine = cos(-radian_angle)
@@ -206,11 +209,11 @@ class WorkingImage:
 
         self.image = new_image
 
-    def rotateAndCrop(self):
+    def rotateAndCrop(self, angle=0):
         self.image = self.image.convert("RGBA")
         aspect_ratio = self.width / self.height
 
-        angle = int(input()) # Change Later to accomodate gui
+        # angle = int(input()) # Change Later to accomodate gui
         radian_angle = radians(angle)
 
         self.image = self.image.rotate(angle, expand=False)
@@ -233,11 +236,11 @@ class WorkingImage:
         #
         # final_product = rotated_image.crop((left, top, right, bottom))
 
-    def rotateAboutCenter(self):
+    def rotateAboutCenter(self, angle=0):
         self.image = self.image.convert("RGBA")
         data = self.image.load()
 
-        angle = int(input())  # Change Later to accomodate gui
+        # angle = int(input())  # Change Later to accomodate gui
         radian_angle = radians(angle)
 
         cosine = cos(-radian_angle)
@@ -257,16 +260,16 @@ class WorkingImage:
                     new_data[x, y] = data[x_old, y_old]
 
 
-    def rotateAboutPoint(self):
+    def rotateAboutPoint(self, angle = 0, x_origin = 0, y_origin = 0):
         self.image = self.image.convert("RGBA")
         data = self.image.load()
 
-        x_origin = int(input("X coord to rotate about: "))
-        y_origin = int(input("Y coord to rotate about: "))
+        # x_origin = int(input("X coord to rotate about: "))
+        # y_origin = int(input("Y coord to rotate about: "))
 
         self.image = self.image.convert("RGBA")
 
-        angle = int(input())  # Change Later to accomodate gui
+        # angle = int(input())  # Change Later to accomodate gui
         radian_angle = radians(angle)
 
         cosine = cos(-radian_angle)
@@ -421,8 +424,9 @@ class WorkingImage:
         self.image = self.image.convert("RGBA")
         data = self.image.load()
 
-        qr_bits = # Make it so it reads the first 16 bits to get the qr code size
-        qr_size = math.sqrt(qr_bits) + 16
+        qr_binary = [i for i in range(16)]
+        qr_bits = int("".join(qr_binary), 2)
+        qr_size = int(math.sqrt(qr_bits)) + 16
 
         qr_code = Image.new("RGB", size=(qr_size, qr_size))
         qr_data = qr_code.load()
@@ -449,8 +453,9 @@ class WorkingImage:
         for qr in qr_code_list:
             print(f"{qr_code_number}: {qr}")
             qr_code_number += 1
-        qr_input = int(input("Selected QR Code: "))
-        qr_code = Image.open(qr_code_list[qr_input])
+        # qr_input = int(input("Selected QR Code: "))
+        # qr_code = Image.open(qr_code_list[qr_input])
+        qr_code = Image.open("qrcode.png")
         qr_data = qr_code.load()
 
         if qr_code.size > self.image.size:
@@ -479,18 +484,18 @@ class WorkingImage:
                 b |= int(i)
                 data[qrx_pos, qry_pos] = (r, g, b)
 
-                qrx_pos += cooldown
+                qrx_pos += 1
 
             x_pos = 0
             y_pos = 0
             current_count = 0
-            size_corrector = (qry_pos * self.width) + qrx_pos
+            # size_corrector = (qry_pos * self.width) + qrx_pos # idk yet
             passes = 0 # Fix so it always writes 16 bits
             encoded_bits = 0
 
             for y in range(self.height):
                 for x in range(self.width):
-                    if passes > size_corrector:
+                    if passes > 16: # mayhaps
                         if encoded_bits >= qr_bits:
                             if current_count == cooldown:
                                 current_count = 0
@@ -530,4 +535,7 @@ class WorkingImage:
         data = self.image.load()
 
     def seamCarvedResize(self):
+        data = self.image.load()
+
+    def k_means_color_isloator(self):
         data = self.image.load()

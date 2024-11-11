@@ -1,6 +1,7 @@
 # import dxcam
 from PIL import Image, ImageFilter
 from os import system, get_terminal_size
+from gaussian_Blur import *
 from imageFunctions import greyscale
 
 
@@ -70,8 +71,10 @@ def convert_video():
 
 
 def convert_picture():
+# Sharpen image first then vector it
+
     # image_name = input("Image name: ")
-    image_name = "skibidi.jpg"
+    image_name = "goblin.jpg"
     image = Image.open(image_name)
     image = greyscale(image)
 
@@ -83,7 +86,6 @@ def convert_picture():
     width, height = image.size
 
     image_ascii = []
-
     for y in range(height):
         for x in range(width):
             # if edge_data[x, y][0] < 100:
