@@ -89,7 +89,28 @@ class TestStringMethods(unittest.TestCase):
     def test_rotate_about_point(self):
         self.image1.rotateAboutCenter(45, 100, 100)
         self.image1.save("center_rotate")
+
+    def test_translation(self):
+        self.image1.arbitraryTranslation(100, 100)
+        self.image1.save("translation")
+
+    def test_transformation(self):
+        self.image1.arbitraryTransformation(100, 100)
+        self.image1.save("transformation")
         
+    def test_scale(self):
+        self.image1.scale(2)
+        self.image1.save("scaled")
+
+    def blur(self):
+        self.image1.blur(10, 5)
+        self.image1.save("blurry")
+
+    def blurnopad(self):
+        self.image1.blurNoPadding(10, 5)
+        self.image1.save("blurry no pad")
+        
+    
     
 if __name__ == '__main__':
     unittest.main()

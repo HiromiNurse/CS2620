@@ -292,12 +292,12 @@ class WorkingImage:
                 if 0 <= x_old < self.width and 0 <= y_old < self.height:
                     new_data[x, y] = data[x_old, y_old]
 
-    def arbitraryTranslation(self):
+    def arbitraryTranslation(self, dx = 0, dy = 0):
         self.image = self.image.convert("RGB")
         data = self.image.load()
 
-        dx = int(input("Change in x: ")) # Change for GUI input
-        dy = int(input("Change in y: ")) # Change for GUI input
+        # dx = int(input("Change in x: ")) # Change for GUI input
+        # dy = int(input("Change in y: ")) # Change for GUI input
 
         new_image = Image.new("RGB", size=(self.width+dx, self.height+dy))
         new_data = new_image.load()
@@ -314,18 +314,18 @@ class WorkingImage:
         self.image = new_image
 
 
-    def arbitraryTransformation(self):
+    def arbitraryTransformation(self, a=0, b=0, cin=0, d=0, e=0, fin=0):
         self.image = self.image.convert("RGB")
         data = self.image.load()
 
-        # In GUI, add in matrix form
-        a = int(input("x scale: "))  # x scale
-        b = int(input("x rotation: "))  # x rotation
-        cin = str(input("x translation: "))  # x translation
-        d = int(input("y rotation: "))  # y rotation
-        e = int(input("y scale: "))  # y scale
-        fin = str(input("y translation: "))  # y translation
-        # Refactor later to use in GUI
+        # # In GUI, add in matrix form
+        # a = int(input("x scale: "))  # x scale
+        # b = int(input("x rotation: "))  # x rotation
+        # cin = str(input("x translation: "))  # x translation
+        # d = int(input("y rotation: "))  # y rotation
+        # e = int(input("y scale: "))  # y scale
+        # fin = str(input("y translation: "))  # y translation
+        # # Refactor later to use in GUI
 
         if cin.strip().lower() == "width":
             c = int(self.image.width - 1)
@@ -348,12 +348,12 @@ class WorkingImage:
                 new_data[x, y] = data[new_x, new_y]
 
 
-    def scale(self):
+    def scale(self, scale_factor = 0):
         self.image = self.image.convert("RGB")
         data = self.image.load()
 
         # Make GUI compatable
-        scale_factor = int(input("Scale Factor: "))
+        # scale_factor = int(input("Scale Factor: "))
 
         new_image = Image.new("RGB", size=(int(self.width * scale_factor), int(self.height * scale_factor)))
         new_data = new_image.load()
@@ -365,16 +365,16 @@ class WorkingImage:
 
                 new_data[x, y] = data[new_x, new_y]
 
-    def blur(self):
-        blur_factor = float(input("Blur amount: "))
-        kernel_size = int(input("Kernel size: "))
+    def blur(self, blur_factor = 5, kernel_size = 5):
+        # blur_factor = float(input("Blur amount: "))
+        # kernel_size = int(input("Kernel size: "))
         kernel = gaussian_kernel(kernel_size, blur_factor)
 
         new_image_array = applyKernel(self.image, kernel)
 
         self.image = Image.fromarray(new_image_array)
 
-    def blurNoPadding(self):
+    def blurNoPadding(self, blur_factor = 5, kernel_size = 5):
         blur_factor = float(input("Blur amount: "))
         kernel_size = int(input("Kernel size: "))
         kernel = gaussian_kernel(kernel_size, blur_factor)
@@ -424,9 +424,13 @@ class WorkingImage:
         self.image = self.image.convert("RGBA")
         data = self.image.load()
 
-        qr_binary = [i for i in range(16)]
+        qr_binary = []
+        for i in range(16):
+            bit = bin(data[i, 0][0])[-1:]
+            qr_binary.append(str(bit))
         qr_bits = int("".join(qr_binary), 2)
         qr_size = int(math.sqrt(qr_bits)) + 16
+        print(qr_binary, "\n", qr_bits, "\n", math.sqrt(qr_bits), "\n", qr_size)
 
         qr_code = Image.new("RGB", size=(qr_size, qr_size))
         qr_data = qr_code.load()
@@ -468,12 +472,13 @@ class WorkingImage:
             qr_bin = bin(qr_bits)[2:]
             qrx_pos = 0
             qry_pos = 0
+            print(qr_bin, qr_bin[::-1], qr_bits, int(qr_bin, 2))
             for i in qr_bin:
                 if qrx_pos < self.width:
                     r, g, b = data[qrx_pos, qry_pos]
                 else:
                     qry_pos += 1
-                    qrx_pos = qrx_pos - self.width
+                    qrx_pos = 0
                     r, g, b = data[qrx_pos, qry_pos]
 
                 r &= 254
