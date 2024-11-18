@@ -87,7 +87,7 @@ class TestStringMethods(unittest.TestCase):
         self.image1.save("center_rotate")
         
     def test_rotate_about_point(self):
-        self.image1.rotateAboutCenter(45, 100, 100)
+        self.image1.rotateAboutCenter(45)
         self.image1.save("center_rotate")
 
     def test_translation(self):
@@ -95,7 +95,7 @@ class TestStringMethods(unittest.TestCase):
         self.image1.save("translation")
 
     def test_transformation(self):
-        self.image1.arbitraryTransformation(100, 100)
+        self.image1.arbitraryTransformation(1, 1, "width", 0, 1, "height")
         self.image1.save("transformation")
         
     def test_scale(self):

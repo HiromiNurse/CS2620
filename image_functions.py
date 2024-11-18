@@ -167,7 +167,7 @@ class WorkingImage:
         new_data = new_image.load()
         for y in range(self.height):
             for x in range(self.width):
-                new_data[x, y] = data[x, self.height - y - 1]
+                new_data[ self.height - y - 1, x] = data[x, y]
         self.image = new_image
 
     def rotate90CounterClockiwse(self):
@@ -177,7 +177,7 @@ class WorkingImage:
         new_data = new_image.load()
         for y in range(self.height):
             for x in range(self.width):
-                new_data[x, y] = data[self.width - 1 - x, y]
+                new_data[y, self.width - x - 1] = data[x, y]
         self.image = new_image
 
     def rotateAndEnlarge(self, angle=0):
@@ -345,7 +345,10 @@ class WorkingImage:
                 new_y = x * d + y * e + f
 
                 # Make sure the pulling works as intended and is not backward
-                new_data[x, y] = data[new_x, new_y]
+                if 0 <= new_x < self.image.width and 0 <= new_y < self.image.height:
+                    new_data[x,y] = data[new_x,new_y]
+                else:
+                    new_data[x,y] = (0,0,0)
 
 
     def scale(self, scale_factor = 0):
@@ -530,17 +533,57 @@ class WorkingImage:
                         passes += 1
 
     def stringEncoder(self):
+        self.image = self.image.convert("RGB")
+        data = self.image.load()
+
         # Encode a string in the least siginificant bit of an image
+        text = input('Hiden Text: ').strip()
+        res = ''.join(format(ord(i), '08b') for i in text)
+
+        qr_bits = len(res)
+        cooldown = (qr_bits) // (self.width * self.height)
+        passes = 0
+        current_count = 0
+
+        for y in range(self.height):
+            for x in range(self.width):
+                if current_count == cooldown:
+                    current_count = 0
+                    r, g, b = data[x, y]
+                    r &= 127
+                    g &= 127
+                    b &= 127
+                    if res[passes] == 0:
+                        # add 0 to the end of the binary numbers
+                        r |= 0
+                        g |= 0
+                        b |= 0
+                    else:
+                        # add 1 to the end of the binary number r
+                        r |= 128
+                        g |= 128
+                        b |= 128
+                    data[x, y] = (r, g, b)
+                else:
+                    current_count += 1
+        else:
+            passes += 1
+
+
+    def readString(self):
         pass
 
-    def colorReducer(self):
-        data = self.image.load()
+    # def colorReducer(self):
+    #     data = self.image.load()
 
-    def deconvoluter(self):
-        data = self.image.load()
+    # def deconvoluter(self):
+    #     data = self.image.load()
 
-    def seamCarvedResize(self):
-        data = self.image.load()
+    # def seamCarvedResize(self):
+    #     data = self.image.load()
 
-    def k_means_color_isloator(self):
-        data = self.image.load()
+    # def k_means_color_isloator(self):
+    #     data = self.image.load()
+
+    # def blur_background(self):
+    #     pass
