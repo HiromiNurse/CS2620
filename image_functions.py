@@ -114,7 +114,6 @@ class WorkingImage:
                 if y >= (self.height // 2):
                     data[x, self.height - 1 - y] = (r, g, b)
 
-
     def bottomToTopDiagonalMirror(self):
         data = self.image.load()
         for y in range(self.height):
@@ -138,7 +137,6 @@ class WorkingImage:
                 new_data[x, y] = data[self.width - x - 1, y]
         self.image = new_image
 
-
     def flipYAxis(self):
         data = self.image.load()
         new_image = Image.new("RGB", size=(self.width, self.height))
@@ -148,9 +146,8 @@ class WorkingImage:
                 new_data[x, y] = data[x, self.height - y - 1]
 
     def flipDiagonal(self):
-        self.flipXAxis
-        self.flipYAxis
-
+        self.image = self.flipXAxis
+        self.image = self.flipYAxis
 
     def invertColors(self):
         self.image = self.image.convert("RGB")
@@ -216,6 +213,7 @@ class WorkingImage:
         # angle = int(input()) # Change Later to accomodate gui
         radian_angle = radians(angle)
 
+## Rotate by myself and clip the final result
         self.image = self.image.rotate(angle, expand=False)
         # Fix / make own code
         # new_width, new_height = rotated_image.size
@@ -258,7 +256,6 @@ class WorkingImage:
 
                 if 0 <= x_old < self.width and 0 <= y_old < self.height:
                     new_data[x, y] = data[x_old, y_old]
-
 
     def rotateAboutPoint(self, angle = 0, x_origin = 0, y_origin = 0):
         self.image = self.image.convert("RGBA")
@@ -313,7 +310,6 @@ class WorkingImage:
                     new_data[x, y] = (0, 0, 0)
         self.image = new_image
 
-
     def arbitraryTransformation(self, a=0, b=0, cin=0, d=0, e=0, fin=0):
         self.image = self.image.convert("RGB")
         data = self.image.load()
@@ -349,7 +345,6 @@ class WorkingImage:
                     new_data[x,y] = data[new_x,new_y]
                 else:
                     new_data[x,y] = (0,0,0)
-
 
     def scale(self, scale_factor = 0):
         self.image = self.image.convert("RGB")

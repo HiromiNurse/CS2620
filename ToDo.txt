@@ -1,0 +1,3 @@
+Create a convert between RGB and RGBA
+Fix line 217 Image.rotate(expand = False) to be my code.
+Ask if Image.FromArray is okay
