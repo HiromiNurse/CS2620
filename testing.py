@@ -119,107 +119,119 @@
 
 # from image_functions import WorkingImage
 from PIL import Image
+
+from image_functions import WorkingImage
+
 #
 # image1 = WorkingImage("goblin.jpg")
 # image1.stringEncoder()
 # image1.save("STRIN!!NG!GN")#
+#
+# def color_distance(one, two):
+#     r_diff = one[0] - two[0]
+#     g_diff = one[1] - two[1]
+#     b_diff = one[2] - two[2]
+#
+#     return abs(r_diff) + abs(g_diff) + abs(b_diff)
+#
+# def dithering():
+#     image = Image.open("minion.jpg")
+#     data = image.load()
+#
+#     error_matrix = []
+#     for x in range(image.width+1):
+#         row = []
+#         for y in range(image.height+1):
+#             row.append(0)
+#         error_matrix.append(row)
+#
+#     for y in range(image.height):
+#         for x in range(image.width):
+#             pixel = data[x, y]
+#             k = (pixel[0] + pixel[1] + pixel[2]) // 3
+#
+#             k += error_matrix[x][y]
+#
+#             out = 0
+#             if k >= 128:
+#                 out = 255
+#
+#             data[x, y] = (out, out, out)
+#
+#             error = k - out
+#             # quarter_error = error / 4
+#             error_matrix[x + 1][y] += error / 3
+#             error_matrix[x - 1][y + 1] += error / 6
+#             error_matrix[x][y + 1] += error / 3
+#             error_matrix[x + 1][y + 1] += error / 6
+#
+#     image.save("GrayscaleMinion.png")
+#
+#
+# def remap_dither(image, data, palette, filename):
+#     palette_distances = []
+#     for color1 in palette:
+#         row = []
+#         for color2 in palette:
+#             distance = color_distance(color1, color2)
+#             row.append(distance)
+#         palette_distances.append(row)
+#
+#     error_matrix = []
+#     for x in range(image.width+1):
+#         row = []
+#         for y in range(image.height+1):
+#             row.append(0)
+#         error_matrix.append(row)
+#
+#     for y in range(image.height):
+#         for x in range(image.width):
+#             pixel = data[x, y]
+#             error = error_matrix[x][y]
+#             pixel = (pixel[0] + error[0], pixel[1] + error[1], pixel[2] + error[2])
+#             min_distance = 442
+#             min_index = 0
+#             for i, color in enumerate(palette):
+#
+#                 palette_distance = palette_distances[min_index][i]
+#                 if palette_distance > min_distance * 2:
+#                     continue
+#
+#                 distance = color_distance(color, pixel)
+#                 if distance < min_distance:
+#                     min_distance = distance
+#                     min_index = i
+#
+#             data[x, y] = palette[min_index]
+#
+#             error = (pixel[0] - data[x, y][0], pixel[1] - data[x, y][1], pixel[2] - data[x, y][2])
+#
+#             error_matrix[x + 1][y] = (
+#             error_matrix[x + 1][0] + error[0] * 0.25, error_matrix[x + 1][1] + error[1] * 0.25,
+#             error_matrix[x + 1][1] + error[1] * 0.25)
+#
+#             error_matrix[x - 1][y+1] = (
+#             error_matrix[x - 1][y+1][0] + error[0] * 0.25, error_matrix[x - 1][y+1][1] + error[1] * 0.25,
+#             error_matrix[x - 1][y+1][1] + error[1] * 0.25)
+#
+#             error_matrix[x][y+1] = (
+#             error_matrix[x][y+1][0] + error[0] * 0.25, error_matrix[x][y+1][1] + error[1] * 0.25,
+#             error_matrix[x][y+1][1] + error[1] * 0.25)
+#
+#             error_matrix[x + 1][y + 1] = (
+#             error_matrix[x + 1][y + 1][0] + error[0] * 0.25, error_matrix[x + 1][y + 1][1] + error[1] * 0.25,
+#             error_matrix[x + 1][y + 1][1] + error[1] * 0.25)
+#
+#     image.save(filename)
+#
+# remap_dither(Image.open("minion.jpg"), Image.open("minion.jpg").load(), )
+# #### BrOKY
 
-def color_distance(one, two):
-    r_diff = one[0] - two[0]
-    g_diff = one[1] - two[1]
-    b_diff = one[2] - two[2]
+# text = input('Hidden Text: ').strip()
+# ascii_code = ''.join(format(ord(i), '08b') for i in text)
+# print(ascii_code)
 
-    return abs(r_diff) + abs(g_diff) + abs(b_diff)
+hidetest = WorkingImage("minion.jpg")
+hidetest.stringEncoder()
+hidetest.save("Encoded_minion")
 
-def dithering():
-    image = Image.open("minion.jpg")
-    data = image.load()
-
-    error_matrix = []
-    for x in range(image.width+1):
-        row = []
-        for y in range(image.height+1):
-            row.append(0)
-        error_matrix.append(row)
-
-    for y in range(image.height):
-        for x in range(image.width):
-            pixel = data[x, y]
-            k = (pixel[0] + pixel[1] + pixel[2]) // 3
-
-            k += error_matrix[x][y]
-
-            out = 0
-            if k >= 128:
-                out = 255
-
-            data[x, y] = (out, out, out)
-
-            error = k - out
-            # quarter_error = error / 4
-            error_matrix[x + 1][y] += error / 3
-            error_matrix[x - 1][y + 1] += error / 6
-            error_matrix[x][y + 1] += error / 3
-            error_matrix[x + 1][y + 1] += error / 6
-
-    image.save("GrayscaleMinion.png")
-
-
-def remap_dither(image, data, palette, filename):
-    palette_distances = []
-    for color1 in palette:
-        row = []
-        for color2 in palette:
-            distance = color_distance(color1, color2)
-            row.append(distance)
-        palette_distances.append(row)
-
-    error_matrix = []
-    for x in range(image.width+1):
-        row = []
-        for y in range(image.height+1):
-            row.append(0)
-        error_matrix.append(row)
-
-    for y in range(image.height):
-        for x in range(image.width):
-            pixel = data[x, y]
-            error = error_matrix[x][y]
-            pixel = (pixel[0] + error[0], pixel[1] + error[1], pixel[2] + error[2])
-            min_distance = 442
-            min_index = 0
-            for i, color in enumerate(palette):
-
-                palette_distance = palette_distances[min_index][i]
-                if palette_distance > min_distance * 2:
-                    continue
-
-                distance = color_distance(color, pixel)
-                if distance < min_distance:
-                    min_distance = distance
-                    min_index = i
-
-            data[x, y] = palette[min_index]
-
-            error = (pixel[0] - data[x, y][0], pixel[1] - data[x, y][1], pixel[2] - data[x, y][2])
-
-            error_matrix[x + 1][y] = (
-            error_matrix[x + 1][0] + error[0] * 0.25, error_matrix[x + 1][1] + error[1] * 0.25,
-            error_matrix[x + 1][1] + error[1] * 0.25)
-
-            error_matrix[x - 1][y+1] = (
-            error_matrix[x - 1][y+1][0] + error[0] * 0.25, error_matrix[x - 1][y+1][1] + error[1] * 0.25,
-            error_matrix[x - 1][y+1][1] + error[1] * 0.25)
-
-            error_matrix[x][y+1] = (
-            error_matrix[x][y+1][0] + error[0] * 0.25, error_matrix[x][y+1][1] + error[1] * 0.25,
-            error_matrix[x][y+1][1] + error[1] * 0.25)
-
-            error_matrix[x + 1][y + 1] = (
-            error_matrix[x + 1][y + 1][0] + error[0] * 0.25, error_matrix[x + 1][y + 1][1] + error[1] * 0.25,
-            error_matrix[x + 1][y + 1][1] + error[1] * 0.25)
-
-    image.save(filename)
-
-remap_dither(Image.open("minion.jpg"), Image.open("minion.jpg").load(), )
-#### BrOKY

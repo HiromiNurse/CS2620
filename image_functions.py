@@ -12,8 +12,7 @@ class WorkingImage:
         self.height = self.image.height
 
     def save(self, name="image"):
-        self.image.save(
-            "\\Users\\hnurse\\Downloads\\CS2620-main\\test_images\\"+ name + ".png")
+        self.image.save(name + ".png")
 
     def corrected_greyscale(self):
         self.image = self.image.convert("RGB")
@@ -511,11 +510,13 @@ class WorkingImage:
                                     r |= 0
                                     g |= 0
                                     b |= 0
+                                    print("Not adding bit")
                                 else:
                                     # add 1 to the end of the binary number r
-                                    r |= 1
-                                    g |= 1
-                                    b |= 1
+                                    r |= 126
+                                    g |= 126
+                                    b |= 126
+                                    print("Adding Bit")
                                 data[x, y] = (r, g, b)
                                 if x_pos < self.width:
                                     x_pos += 1
@@ -532,38 +533,36 @@ class WorkingImage:
         data = self.image.load()
 
         # Encode a string in the least siginificant bit of an image
-        text = input('Hiden Text: ').strip()
-        res = ''.join(format(ord(i), '08b') for i in text)
+        text = input('Hidden Text: ').strip()
+        ascii_code = ''.join(format(ord(i), '08b') for i in text)
 
-        qr_bits = len(res)
-        cooldown = (qr_bits) // (self.width * self.height)
+        qr_bits = len(ascii_code)
+        cooldown = qr_bits // (self.width * self.height)
         passes = 0
         current_count = 0
 
         for y in range(self.height):
             for x in range(self.width):
-                if current_count == cooldown:
+                if current_count == cooldown-1:
                     current_count = 0
                     r, g, b = data[x, y]
                     r &= 127
                     g &= 127
                     b &= 127
-                    if res[passes] == 0:
+                    if ascii_code[passes] == 0:
                         # add 0 to the end of the binary numbers
                         r |= 0
                         g |= 0
                         b |= 0
                     else:
                         # add 1 to the end of the binary number r
-                        r |= 128
-                        g |= 128
-                        b |= 128
+                        r |= 1
+                        g |= 1
+                        b |= 1
                     data[x, y] = (r, g, b)
+                    passes += 1
                 else:
                     current_count += 1
-        else:
-            passes += 1
-
 
     def readString(self):
         pass
