@@ -13,6 +13,7 @@ options_list = ["Quit", "Change Image", "Save Image", "Corrected Greyscale",
                 "Custom Kernel", "Qr Code Simplifier", "Qr Code Reader", "Qr Code Enocoder",
                 "String Encoder", "String Decoder", "Ascii Video"]
 
+
 def print_menu():
     column_height = len(options_list) // 3
     extra_options = len(options_list) % 3
@@ -116,7 +117,7 @@ if __name__ == "__main__":
             case 33:
                 image.readString()
             case 34:
-
+                subprocess.Popoen(['cmd', '/k', 'python ascii_video.py'])
             case _:
                 print("Not an option.")
 
