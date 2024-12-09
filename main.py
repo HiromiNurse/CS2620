@@ -1,4 +1,5 @@
 from image_functions import *
+import subprocess
 from ascii_video_color import *
 
 
@@ -117,8 +118,11 @@ if __name__ == "__main__":
             case 33:
                 image.readString()
             case 34:
-                subprocess.Popoen(['cmd', '/k', 'python ascii_video.py'])
+                initialize1()
             case _:
                 print("Not an option.")
-
-        option = print_menu()
+        go_forth = input("Continue? (y/n): ")
+        if go_forth.lower() != "n":
+            option = print_menu()
+        else:
+            quit()

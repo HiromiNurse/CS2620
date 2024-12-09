@@ -3,6 +3,8 @@ from PIL import Image
 from os import system, get_terminal_size
 from time import sleep
 
+ASCII_CHARS = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
+
 def resize(image, new_width=100):
     width, height = get_terminal_size()
     return image.resize((width, height-5), resample=0)
@@ -28,12 +30,13 @@ def get_ascii(image, brightness_factor=1.5):
         ascii_str.append(f"{color_code}{ascii_char}\033[0m")
     return ascii_str
 
-ASCII_CHARS = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
-screen_number = int(input("Which monitor will be the input? (0-3): "))
-camera = create(device_idx=0, output_idx=screen_number)
-camera.start()
+def initialize1():
+    screen_number = int(input("Which monitor will be the input? (0-3): "))
+    camera = create(device_idx=0, output_idx=screen_number)
+    camera.start()
+    videoing(camera)
 
-def videoing():
+def videoing(camera):
     count = 0
     while count < 216000:
         frame = camera.get_latest_frame()
@@ -51,5 +54,3 @@ def videoing():
         print(ascii_img)
         sleep(.01666)
         count += 1
-
-videoing()
