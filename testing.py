@@ -234,4 +234,9 @@ from image_functions import WorkingImage
 hidetest = WorkingImage("minion.jpg")
 hidetest.stringEncoder()
 hidetest.save("Encoded_minion")
+hidetest.readString()
 
+# number = 115200
+# bin_num = bin(number)
+# number1 = int(bin_num, 2)
+# print(number, bin_num, number1, type(number))

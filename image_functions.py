@@ -4,6 +4,8 @@ from gaussian_Blur import *
 from os import listdir
 import math
 
+from imageFunctions import working_image
+
 
 class WorkingImage:
     def __init__(self, name="image.jpg"):
@@ -418,7 +420,7 @@ class WorkingImage:
                     qr_data[x, y] = 255
 
     def qrCodeReader(self):
-        self.image = self.image.convert("RGBA")
+        self.image = self.image.convert("RGB")
         data = self.image.load()
 
         qr_binary = []
@@ -505,7 +507,7 @@ class WorkingImage:
                                 r &= 254
                                 g &= 254
                                 b &= 254
-                                if qr_data[x_pos, y_pos] < 128:
+                                if qr_bin[x_pos + y_pos] < 128:
                                     # add 0 to the end of the binary numbers
                                     r |= 0
                                     g |= 0
@@ -532,40 +534,109 @@ class WorkingImage:
         self.image = self.image.convert("RGB")
         data = self.image.load()
 
+        output_image = Image.new("RGB", size=(self.width, self.height))
+        out_data = output_image.load()
+
         # Encode a string in the least siginificant bit of an image
         text = input('Hidden Text: ').strip()
         ascii_code = ''.join(format(ord(i), '08b') for i in text)
 
         qr_bits = len(ascii_code)
-        cooldown = qr_bits // (self.width * self.height)
+        cooldown = (self.width * self.height) // qr_bits
         passes = 0
         current_count = 0
 
+# Convert the cooldown into binary
+# Store the binary number in the first 32 bits
+# Read the first 32 bits into a string
+# Convert that string into an int
+# Use that int as the spacing between information bits in image reading
+# Actually store string in bits
+        store_cooldown = str(cooldown).strip()
+        bin_cooldown = bin(int(store_cooldown))[2:]
+        bin_cooldown = bin_cooldown.rjust(64, '0')[:64]
+        cooldown_passes = 0
+
         for y in range(self.height):
             for x in range(self.width):
-                if current_count == cooldown-1:
-                    current_count = 0
+                if cooldown_passes < 64:
                     r, g, b = data[x, y]
-                    r &= 127
-                    g &= 127
-                    b &= 127
-                    if ascii_code[passes] == 0:
-                        # add 0 to the end of the binary numbers
-                        r |= 0
-                        g |= 0
-                        b |= 0
-                    else:
-                        # add 1 to the end of the binary number r
-                        r |= 1
-                        g |= 1
-                        b |= 1
-                    data[x, y] = (r, g, b)
-                    passes += 1
+                    r &= 254
+                    g &= 254
+                    b &= 254
+                    while bin_cooldown[cooldown_passes] == " ":
+                        cooldown_passes += 1
+                    r |= int(bin_cooldown[cooldown_passes])
+                    g |= int(bin_cooldown[cooldown_passes])
+                    b |= int(bin_cooldown[cooldown_passes])
+                    out_data[x, y] = (r, g, b)
+                    cooldown_passes += 1
                 else:
-                    current_count += 1
+                    if current_count == cooldown-1:
+                        current_count = 0
+                        r, g, b = data[x, y]
+                        r &= 254
+                        g &= 254
+                        b &= 254
+                        if ascii_code[passes] == '0':
+                            # print("0")
+                            # add 0 to the end of the binary numbers
+                            r |= 0
+                            g |= 0
+                            b |= 0
+                            out_data[x, y] = (r, g, b)
+                        else:
+                            # print("1")
+                            # add 1 to the end of the binary number r
+                            r |= 1
+                            g |= 1
+                            b |= 1
+                            out_data[x, y] = (r, g, b)
+                        passes += 1
+                    else:
+                        out_data[x, y] = data[x, y]
+                        current_count += 1
+        print(ascii_code)
+        self.image = output_image
 
     def readString(self):
-        pass
+        width, height = self.image.size # Correct for i > width
+        data = self.image.load()
+
+        cooldown = ""
+        for i in range(64):
+            r, g, b = data[i, 0]
+            r &= 1
+            g &= 1
+            b &= 1
+            average = round((r+g+b)/3)
+            if average == 1:
+                cooldown += '1'
+            else:
+                cooldown += '0'
+        cooldown = int(cooldown, 2)
+
+        cooldown_passes = 0
+        current_count = 0
+        output_string = []
+        for y in range(self.height):
+            for x in range(self.width):
+                if cooldown_passes < 64:
+                    cooldown_passes += 1
+                else:
+                    if current_count == cooldown-1:
+                        current_count = 0
+                        r, g, b = data[x, y]
+                        if r % 2 == 0:
+                            output_string.append('0')
+                        else:
+                            output_string.append('1')
+                    else:
+                        current_count += 1
+        ascii_binary = "".join(output_string)
+        chunks = [ascii_binary[i:i+8] for i in range(0, len(ascii_binary), 8)]
+        print(chunks, output_string)
+
 
     # def colorReducer(self):
     #     data = self.image.load()
