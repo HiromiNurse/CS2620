@@ -1,6 +1,7 @@
 import dxcam
 from PIL import Image
 from os import system, get_terminal_size
+from time import sleep
 
 '''
 Add Vectoring? Make it so edges are detected and accounted for
@@ -46,17 +47,19 @@ screen_number = int(input("Which monitor will be the input? (0-3): "))
 camera = dxcam.create(device_idx=0, output_idx=screen_number)
 camera.start()
 
-while True:
-    frame = camera.get_latest_frame()
-    image = Image.fromarray(frame)
-    image = resize(image)
+def videoing():
+    while True:
+        frame = camera.get_latest_frame()
+        image = Image.fromarray(frame)
+        image = resize(image)
 
-    ascii_str = get_ascii(image, brightness_factor=1.5)
-    width = image.width
-    ascii_img = ""
+        ascii_str = get_ascii(image, brightness_factor=1.5)
+        width = image.width
+        ascii_img = ""
 
-    for i in range(0, len(ascii_str), width):
-        ascii_img += ''.join(ascii_str[i: i + width]) + "\n"
+        for i in range(0, len(ascii_str), width):
+            ascii_img += ''.join(ascii_str[i: i + width]) + "\n"
 
-    system('cls')
-    print(ascii_img)
+        system('cls')
+        print(ascii_img)
+        sleep(.01666)

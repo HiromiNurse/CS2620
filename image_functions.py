@@ -13,6 +13,12 @@ class WorkingImage:
         self.width = self.image.width
         self.height = self.image.height
 
+    def change_image(self):
+        new_name = str(input("Image name (with extension): ")).strip()
+        self.image = Image.open(new_name)
+        self.width = self.image.width
+        self.height = self.image.height
+
     def save(self, name="image"):
         self.image.save(name + ".png")
 
@@ -98,7 +104,7 @@ class WorkingImage:
                 if x >= (self.width // 2):
                     data[self.width - 1 - x, y] = (r, g, b)
 
-    def topToBottomMirro(self):
+    def topToBottomMirror(self):
         self.image = self.image.convert("RGB")
         data = self.image.load()
         for y in range(self.height):
@@ -216,6 +222,10 @@ class WorkingImage:
 
 ## Rotate by myself and clip the final result
         self.image = self.image.rotate(angle, expand=False)
+    '''
+    Here fix this
+    Fix this
+    '''
         # Fix / make own code
         # new_width, new_height = rotated_image.size
         #
@@ -311,7 +321,7 @@ class WorkingImage:
                     new_data[x, y] = (0, 0, 0)
         self.image = new_image
 
-    def arbitraryTransformation(self, a=0, b=0, cin=0, d=0, e=0, fin=0):
+    def arbitraryTransformation(self, a=0, b=0, cin='width', d=0, e=0, fin='height'):
         self.image = self.image.convert("RGB")
         data = self.image.load()
 
@@ -328,10 +338,14 @@ class WorkingImage:
             c = int(self.image.width - 1)
         elif cin.strip().lower() == "height":
             c = int(self.image.height - 1)
+        else:
+            c = int(cin)
         if fin.strip().lower() == "height":
             f = int(self.image.height - 1)
         elif fin.strip().lower() == "width":
             f = int(self.image.width - 1)
+        else:
+            f = int(fin)
 
         new_image = Image.new("RGB", size=(self.width, self.height))
         new_data = new_image.load()
@@ -351,7 +365,7 @@ class WorkingImage:
         self.image = self.image.convert("RGB")
         data = self.image.load()
 
-        # Make GUI compatable
+        # Make GUI compatible
         # scale_factor = int(input("Scale Factor: "))
 
         new_image = Image.new("RGB", size=(int(self.width * scale_factor), int(self.height * scale_factor)))
@@ -512,13 +526,11 @@ class WorkingImage:
                                     r |= 0
                                     g |= 0
                                     b |= 0
-                                    print("Not adding bit")
                                 else:
                                     # add 1 to the end of the binary number r
                                     r |= 126
                                     g |= 126
                                     b |= 126
-                                    print("Adding Bit")
                                 data[x, y] = (r, g, b)
                                 if x_pos < self.width:
                                     x_pos += 1
@@ -542,7 +554,7 @@ class WorkingImage:
         ascii_code = ''.join(format(ord(i), '08b') for i in text)
 
         qr_bits = len(ascii_code)
-        cooldown = (self.width * self.height) // qr_bits
+        cooldown = (((self.width * self.height) - 64) // qr_bits)
         passes = 0
         current_count = 0
 
@@ -635,7 +647,11 @@ class WorkingImage:
                         current_count += 1
         ascii_binary = "".join(output_string)
         chunks = [ascii_binary[i:i+8] for i in range(0, len(ascii_binary), 8)]
-        print(chunks, output_string)
+        message = []
+        for character in chunks:
+            ascii_number = int(character, 2)
+            message.append(chr(ascii_number))
+        print("".join(message))
 
 
     # def colorReducer(self):
