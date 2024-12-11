@@ -1,17 +1,16 @@
 from image_functions import *
-import subprocess
 from ascii_video_color import *
 
 
 options_list = ["Quit", "Change Image", "Save Image", "Corrected Greyscale",
-                "Greyscale", "Isolate Red", "Isolate Green", "Isolate Blue", "Invert Colors"
+                "Greyscale", "Isolate Red", "Isolate Green", "Isolate Blue", "Invert Colors",
                 "Mirror Left on Right", "Mirror Right on Left", "Mirror Top on Bottom",
                 "Mirror Bottom on Top", "Mirror Top Left to Bottom Right",
                 "Mirror Bottom Right to Top Left", "Flip About X-axis", "Flip About Y-axis",
                 "Flip About Diagonal", "Rotate 90 Clockwise", "Rotate 90 CounterClockwise",
                 "Rotate and Expand", "Rotate Maintain Size", "Rotate About Center",
                 "Rotate About Point", "Translate", "Transform", "Scale", "Blur", "Blur No Padding",
-                "Custom Kernel", "Qr Code Simplifier", "Qr Code Reader", "Qr Code Enocoder",
+                "Custom Kernel", "Qr Code Simplifier", "Qr Code Reader", "Qr Code Encoder",
                 "String Encoder", "String Decoder", "Ascii Video"]
 
 
@@ -37,12 +36,18 @@ def print_menu():
         print(f"{column_height:3}: {options_list[column_height]:35}"
               f"{(column_height * 2) + 1:3}: {options_list[(column_height * 2) + 1]:35}")
 
-        change_type = int(input("Change: ").strip())
-        print(f"Selected Change: {options_list[change_type]}")
-        return change_type
+    change_type = int(input("Change: ").strip())
+    print(f"Selected Change: {options_list[change_type]}")
+    return change_type
 
 if __name__ == "__main__":
-    image = WorkingImage
+    image_list = [f for f in listdir() if ".jpg" in f]
+    number = 1
+    for image in image_list:
+        print(f"{number}: {image}")
+        number += 1
+    image_name = input("Name of the image to open: ")
+    image = WorkingImage(image_name)
     option = print_menu()
     while option != 0:
         match option:
@@ -121,8 +126,8 @@ if __name__ == "__main__":
                 initialize1()
             case _:
                 print("Not an option.")
-        go_forth = input("Continue? (y/n): ")
-        if go_forth.lower() != "n":
-            option = print_menu()
-        else:
-            quit()
+        # go_forth = input("Continue? (y/n): ")
+        # if go_forth.lower() != "n":
+        option = print_menu()
+        # else:
+        #     quit()

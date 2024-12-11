@@ -14,6 +14,11 @@ class WorkingImage:
         self.height = self.image.height
 
     def change_image(self):
+        image_list = [f for f in listdir() if ".jpg" in f]
+        number = 1
+        for image in image_list:
+            print(f"{number}: {image}")
+            number += 1
         new_name = str(input("Image name (with extension): ")).strip()
         self.image = Image.open(new_name)
         self.width = self.image.width
