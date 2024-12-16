@@ -4,8 +4,6 @@ from gaussian_Blur import *
 from os import listdir
 import math
 
-from imageFunctions import working_image
-
 
 class WorkingImage:
     def __init__(self, name="image.jpg"):
@@ -19,7 +17,7 @@ class WorkingImage:
         for image in image_list:
             print(f"{number}: {image}")
             number += 1
-        new_name = str(input("Image name (with extension): ")).strip()
+        new_name = str(input("Image name (with extension): ")).strip() + "houses.jpg"
         self.image = Image.open(new_name)
         self.width = self.image.width
         self.height = self.image.height
@@ -156,6 +154,7 @@ class WorkingImage:
         for y in range(self.height):
             for x in range(self.width):
                 new_data[x, y] = data[x, self.height - y - 1]
+        self.image = new_image
 
     def flipDiagonal(self):
         self.image = self.flipXAxis
@@ -218,37 +217,38 @@ class WorkingImage:
 
         self.image = new_image
 
-    def rotateAndCrop(self, angle=0):
-        self.image = self.image.convert("RGBA")
-        aspect_ratio = self.width / self.height
-
-        # angle = int(input()) # Change Later to accomodate gui
-        radian_angle = radians(angle)
-
-## Rotate by myself and clip the final result
-        self.image = self.image.rotate(angle, expand=False)
-    '''
-    Here fix this
-    Fix this
-    '''
-        # Fix / make own code
-        # new_width, new_height = rotated_image.size
-        #
-        # cos_angle = abs(cos(angle_radians))
-        # sin_angle = abs(sin(angle_radians))
-        #
-        # new_w = width * cos_angle + height * sin_angle
-        # new_h = height * cos_angle + width * sin_angle
-        #
-        # crop_w = int(min(new_w, new_h * aspect_ratio))
-        # crop_h = int(min(new_h, new_w / aspect_ratio))
-        #
-        # left = (new_width - crop_w) // 2
-        # right = left + crop_w
-        # top = (new_height - crop_h) // 2
-        # bottom = top + crop_h
-        #
-        # final_product = rotated_image.crop((left, top, right, bottom))
+# Same as rotate about center
+#     def rotateAndCrop(self, angle=0):
+#         self.image = self.image.convert("RGBA")
+#         aspect_ratio = self.width / self.height
+#
+#         # angle = int(input()) # Change Later to accomodate gui
+#         radian_angle = radians(angle)
+#
+# ## Rotate by myself and clip the final result
+#         self.image = self.image.rotate(angle, expand=False)
+#     '''
+#     Here fix this
+#     Fix this
+#     '''
+#         # Fix / make own code
+#         # new_width, new_height = rotated_image.size
+#         #
+#         # cos_angle = abs(cos(angle_radians))
+#         # sin_angle = abs(sin(angle_radians))
+#         #
+#         # new_w = width * cos_angle + height * sin_angle
+#         # new_h = height * cos_angle + width * sin_angle
+#         #
+#         # crop_w = int(min(new_w, new_h * aspect_ratio))
+#         # crop_h = int(min(new_h, new_w / aspect_ratio))
+#         #
+#         # left = (new_width - crop_w) // 2
+#         # right = left + crop_w
+#         # top = (new_height - crop_h) // 2
+#         # bottom = top + crop_h
+#         #
+#         # final_product = rotated_image.crop((left, top, right, bottom))
 
     def rotateAboutCenter(self, angle=0):
         self.image = self.image.convert("RGBA")
@@ -291,7 +291,7 @@ class WorkingImage:
         new_width = int(abs(self.width * -cosine) + abs(self.height * -sine))
         new_height = int(abs(self.height * -cosine) + abs(self.width * -sine))
 
-        new_image = Image.new("RBGA", size = (new_width, new_height))
+        new_image = Image.new(mode="RBGA", size=(new_width, new_height))
         new_data = new_image.load()
 
         x_center, y_center = self.width // 2 + x_origin, self.height // 2 + y_origin
@@ -393,8 +393,6 @@ class WorkingImage:
         self.image = Image.fromarray(new_image_array)
 
     def blurNoPadding(self, blur_factor = 5, kernel_size = 5):
-        blur_factor = float(input("Blur amount: "))
-        kernel_size = int(input("Kernel size: "))
         kernel = gaussian_kernel(kernel_size, blur_factor)
 
         new_image_array = applyKernelNoPadding(self.image, kernel)

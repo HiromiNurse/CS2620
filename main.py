@@ -8,7 +8,7 @@ options_list = ["Quit", "Change Image", "Save Image", "Corrected Greyscale",
                 "Mirror Bottom on Top", "Mirror Top Left to Bottom Right",
                 "Mirror Bottom Right to Top Left", "Flip About X-axis", "Flip About Y-axis",
                 "Flip About Diagonal", "Rotate 90 Clockwise", "Rotate 90 CounterClockwise",
-                "Rotate and Expand", "Rotate Maintain Size", "Rotate About Center",
+                "Rotate and Expand", "", "Rotate About Center",
                 "Rotate About Point", "Translate", "Transform", "Scale", "Blur", "Blur No Padding",
                 "Custom Kernel", "Qr Code Simplifier", "Qr Code Reader", "Qr Code Encoder",
                 "String Encoder", "String Decoder", "Ascii Video"]
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             case 1:
                 image.change_image()
             case 2:
-                save_name = input("Name of the same image (no extension): ")
+                save_name = input("Name of the saved image (no extension): ")
                 image.save(name=save_name)
             case 3:
                 image.corrected_greyscale()
@@ -64,65 +64,84 @@ if __name__ == "__main__":
                 image.greyscale()
             case 5:
                 image.isolateRed()
-            case 5:
-                image.isolateGreen()
             case 6:
-                image.isolateBlue()
+                image.isolateGreen()
             case 7:
-                image.invertColors()
+                image.isolateBlue()
             case 8:
-                image.leftToRightMirror()
+                image.invertColors()
             case 9:
-                image.rightToLeftMirror()
+                image.leftToRightMirror()
             case 10:
-                image.topToBottomMirror()
+                image.rightToLeftMirror()
             case 11:
-                image.bottomToTopMirror()
+                image.topToBottomMirror()
             case 12:
-                image.bottomToTopDiagonalMirror()
+                image.bottomToTopMirror()
             case 13:
-                image.topToBottomDiagonalMirror()
+                image.bottomToTopDiagonalMirror()
             case 14:
-                image.flipXAxis()
+                image.topToBottomDiagonalMirror()
             case 15:
-                image.flipYAxis()
+                image.flipXAxis()
             case 16:
-                image.flipDiagonal()
+                image.flipYAxis()
             case 17:
-                image.rotate90Clockwise()
+                image.flipDiagonal()
             case 18:
-                image.rotate90CounterClockiwse()
+                image.rotate90Clockwise()
             case 19:
-                image.rotateAndEnlarge()
+                image.rotate90CounterClockiwse()
             case 20:
-                image.rotateAndCrop()
+                angle = int(input('Angle: '))
+                image.rotateAndEnlarge(angle)
             case 21:
-                image.rotateAboutCenter()
+                angle = int(input('Angle: '))
+                image.rotateAndCrop(angle)
             case 22:
-                image.rotateAboutPoint()
+                angle = int(input('Angle: '))
+                image.rotateAboutCenter(angle)
             case 23:
-                image.arbitraryTranslation()
+                angle = int(input('Angle: '))
+                x = int(input("x: "))
+                y = int(input("y: "))
+                image.rotateAboutPoint(angle, x, y)
             case 24:
-                image.arbitraryTransformation()
+                dx = int(input("Change in x: "))
+                dy = int(input("Change in y: "))
+                image.arbitraryTranslation(dx, dy)
             case 25:
-                image.scale()
+                a = float(input("X Scale: "))
+                b = int(input("X Rotation: "))
+                c = (input("X Translation: "))
+                d = float(input("Y Scale: "))
+                e = int(input("Y Rotation: "))
+                f = (input("Y Translation: "))
+                image.arbitraryTransformation()
             case 26:
-                image.blur()
+                scale_factor = float(input("Scale factor: "))
+                image.scale(scale_factor)
             case 27:
-                image.blurNoPadding()
+                blur = float(input("Blur amount: "))
+                kernel = int(input("Kernel size: "))
+                image.blur(blur, kernel)
             case 28:
-                image.customKernelApplicator()
+                blur = float(input("Blur amount: "))
+                kernel = int(input("Kernel size: "))
+                image.blurNoPadding(blur, kernel)
             case 29:
-                image.qr_code_simplifier()
+                image.customKernelApplicator()
             case 30:
-                image.qrCodeReader()
+                image.qr_code_simplifier()
             case 31:
-                image.qrCodeEncoder()
+                image.qrCodeReader()
             case 32:
-                image.stringEncoder()
+                image.qrCodeEncoder()
             case 33:
-                image.readString()
+                image.stringEncoder()
             case 34:
+                image.readString()
+            case 35:
                 initialize1()
             case _:
                 print("Not an option.")

@@ -4,7 +4,7 @@ from image_functions import *
 
 class TestStringMethods(unittest.TestCase):
     def setUp(self):
-        self.image1 = WorkingImage("color.jpg")
+        self.image1 = WorkingImage("houses.jpg")
 
     def test_cor_grey(self):
         self.image1.corrected_greyscale()
@@ -35,7 +35,7 @@ class TestStringMethods(unittest.TestCase):
         self.image1.save("LtoRmirror")
 
     def test_mirror3(self):
-        self.image1.topToBottomMirro()
+        self.image1.topToBottomMirror()
         self.image1.save("TtoBmirror")
 
     def test_mirror4(self):
@@ -109,7 +109,6 @@ class TestStringMethods(unittest.TestCase):
     def blurnopad(self):
         self.image1.blurNoPadding(10, 5)
         self.image1.save("blurry no pad")
-        
     
     
 if __name__ == '__main__':
